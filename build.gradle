@@ -37,6 +37,22 @@ dependencies {
 
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
 	implementation 'com.querydsl:querydsl-apt:5.0.0'
+
+	//rdis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//embedded-redis
+	implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+
+	//웹 소켓
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.webjars:sockjs-client:1.5.1'
+	implementation 'org.webjars:stomp-websocket:2.3.4'
+
+	//테스트에서 lombok 사용
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
 }
 
 tasks.named('test') {
