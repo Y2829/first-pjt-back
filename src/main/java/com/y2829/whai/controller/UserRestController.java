@@ -5,10 +5,7 @@ import com.y2829.whai.dto.UserDto;
 import com.y2829.whai.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.y2829.whai.common.utils.ApiUtils.success;
 
@@ -43,7 +40,15 @@ public class UserRestController {
         );
     }
 
-    @GetMapping
+    @PostMapping
+    @Operation(summary = "회원 가입", description = "회원가입을 합니다.")
+    public ApiUtils.ApiResult<UserDto.Response> registerUser() {
+        return success(
+                null
+        );
+    }
+
+    @PutMapping
     @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
     public ApiUtils.ApiResult<UserDto.Response> modifyUser() {
         return success(

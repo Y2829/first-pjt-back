@@ -9,10 +9,6 @@ server:
       force: true
 
 spring:
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-
   jpa:
     hibernate:
       ddl-auto: create
@@ -30,4 +26,12 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
 
