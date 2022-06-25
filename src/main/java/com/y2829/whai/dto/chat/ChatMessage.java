@@ -9,11 +9,11 @@ import java.io.Serializable;
 @Setter
 public class ChatMessage implements Serializable {
 
-    public enum MessageType {
+    public enum Type {
         ENTER, TALK
     }
 
-    private MessageType type;
+    private Type type;
     private String roomId;
     private String sender;
     private String message;
