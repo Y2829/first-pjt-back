@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class ChatMessage implements Serializable {
 
     public enum Type {
-        ENTER, TALK
+        ENTER, TALK, QUIT
     }
 
     private Type type;

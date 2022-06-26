@@ -35,7 +35,5 @@ public class EmbeddedRedisConfig {
         if (redisServer != null) {
             redisServer.stop();
         }
-
     }
-
 }

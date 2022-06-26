@@ -38,6 +38,14 @@ public class RedisConfig {
     }
 
     /**
+     * 실제 메시지를 처리하는 subscriber 설정 추가
+     */
+    @Bean
+    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
+        return new MessageListenerAdapter(subscriber, "sendMessage");
+    }
+
+    /**
      * 어플리케이션에 사용할 redisTemplate 설정
      */
     @Bean
@@ -50,14 +58,6 @@ public class RedisConfig {
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
 
         return redisTemplate;
-    }
-
-    /**
-     * 실제 메시지를 처리하는 subscriber 설정 추가
-     */
-    @Bean
-    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
-        return new MessageListenerAdapter(subscriber, "sendMessage");
     }
 
 }
