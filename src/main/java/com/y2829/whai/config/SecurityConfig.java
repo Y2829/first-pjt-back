@@ -15,15 +15,19 @@ import com.y2829.whai.oauth.service.CustomUserDetailsService;
 import com.y2829.whai.oauth.token.AuthTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -42,6 +46,20 @@ public class SecurityConfig {
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
     private final RefreshTokenRepository refreshTokenRepository;
 
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .antMatchers(
+                        "/v3/api-docs",
+                        "/configuration/**",
+                        "/swagger-resources/**",
+                        "/swagger-ui/**",
+                        "/webjars/**",
+                        "/api-docs/**"
+                );
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
@@ -52,46 +70,47 @@ public class SecurityConfig {
 
         http
                 .cors()
-                .and()
+            .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+            .and()
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .accessDeniedHandler(tokenAccessDeniedHandler)
-                .and()
+            .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
                 .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
                 .anyRequest().authenticated()
-                .and()
+            .and()
                 .oauth2Login()
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorization")
                 .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
-                .and()
+            .and()
                 .redirectionEndpoint()
                 .baseUri("/*/oauth2/code/*")
-                .and()
+            .and()
                 .userInfoEndpoint()
                 .userService(oAuth2UserService)
-                .and()
+            .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler())
                 .failureHandler(oAuth2AuthenticationFailureHandler())
-                .and()
+            .and()
                 .authenticationManager(authenticationManager);
 
+        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     /*
      * auth 매니저 설정
      * */
-    @Bean
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();

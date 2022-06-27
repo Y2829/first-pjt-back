@@ -44,7 +44,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
         // 옵셔널 수정 필요
-        User savedUser = userRepository.findByUserId(userInfo.getId()).get();
+        User savedUser = userRepository.findByUserId(userInfo.getId());
 
         if (savedUser != null) {
             if (providerType != savedUser.getProviderType()) {

@@ -28,8 +28,8 @@ spring:
             - profile_image
           clientName: Naver
         kakao:
-          clientId: '{카카오 client-id}'
-          clientSecret: '{카카오 client-secret}'
+          clientId: 569d7569cfedd78f820b883182c7d91d
+          clientSecret: xMB2vdEoV8h3Ecfh1yjtnkRMQJBafNkA
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
           redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"

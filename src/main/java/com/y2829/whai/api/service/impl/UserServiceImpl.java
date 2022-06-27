@@ -3,6 +3,7 @@ package com.y2829.whai.api.service.impl;
 import com.y2829.whai.api.entity.User;
 import com.y2829.whai.api.repository.UserRepository;
 import com.y2829.whai.api.service.UserService;
+import com.y2829.whai.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +19,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<User> login() {
-
-        // Auth 로그인
-
-        return Optional.empty();
+    public Optional<User> getUser(String userId) {
+        return Optional.of(userRepository.findByUserId(userId));
     }
 }

@@ -9,6 +9,9 @@ server:
       force: true
 
 spring:
+  profiles:
+    include: oauth
+
   jpa:
     hibernate:
       ddl-auto: create
@@ -20,7 +23,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/whai?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
     username: y2829
-    password: admin2829!
+    password: Admin2829!
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   servlet:
@@ -37,7 +40,7 @@ cors:
 
 # jwt secret key 설정
 jwt:
-  secret: 'dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa'
+  secret: '5597b93a2843078cbb0c920ae41dfe20f1685e10c67e423c11ab91adfc319d12'
 
 # 토큰 관련 secret Key 및 RedirectUri 설정
 app:
