@@ -30,22 +30,6 @@ public class UserRestController {
         );
     }
 
-    @GetMapping("login")
-    @Operation(summary = "로그인", description = "로그인합니다.")
-    public ApiUtils.ApiResult<UserDto.Response> login() {
-        return success(
-                null
-        );
-    }
-
-    @GetMapping("logout")
-    @Operation(summary = "로그아웃", description = "로그아웃합니다.")
-    public ApiUtils.ApiResult<UserDto.Response> logout() {
-        return success(
-                null
-        );
-    }
-
     @PostMapping
     @Operation(summary = "회원 가입", description = "회원가입을 합니다.")
     public ApiUtils.ApiResult<UserDto.Response> registerUser() {
