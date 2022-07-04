@@ -1,24 +1,28 @@
 spring:
   security:
     oauth2.client:
-
       # Registration 설정
       registration:
+        github:
+          clientId: 2f87681af66871f0e87a
+          clientSecret: 968672112783d717d5d7b66d0a2d5dd3889f9cf3
+          scope:
+            - user
         google:
-          clientId: '{구글 client-id}'
-          clientSecret: '{구글 client-secret}'
+          clientId: 81046774041-a85v32gaobqebru5b1kukiesaau8vrvi.apps.googleusercontent.com
+          clientSecret: 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
           scope:
             - email
             - profile
         facebook:
-          clientId: '{페이스북 client-id}'
-          clientSecret: '{페이스북 client-secret}'
+          clientId: 587184166149046
+          clientSecret: f0ed6a8b0137cd7ad3dd82176981cec6
           scope:
             - email
             - public_profile
         naver:
-          clientId: '{네이버 client-id}'
-          clientSecret: '{네이버 client-secret}'
+          clientId: puiQ4gE6H3Hk8owLJB0H
+          clientSecret: hZZXqdc0Pp
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
           redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
@@ -38,7 +42,6 @@ spring:
             - profile_image
             - account_email
           clientName: Kakao
-
       # Provider 설정
       provider:
         naver:
