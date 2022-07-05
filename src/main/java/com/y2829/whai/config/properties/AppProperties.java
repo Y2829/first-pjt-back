@@ -1,8 +1,6 @@
 package com.y2829.whai.config.properties;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -18,8 +16,6 @@ public class AppProperties {
 
     @Getter
     @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class Auth {
         private String tokenSecret;
         private long tokenExpiry;

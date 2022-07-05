@@ -18,17 +18,13 @@ repositories {
 	mavenCentral()
 }
 
-//tasks.named('compileJava') {
-//	inputs.files(tasks.named('processResources'))
-//}
-
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.6'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.6.6'
 	implementation 'org.springframework.boot:spring-boot-starter-security:2.6.6'
-	implementation 'org.springframework.boot:spring-boot-configuration-processor:2.6.6'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.6.6'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
