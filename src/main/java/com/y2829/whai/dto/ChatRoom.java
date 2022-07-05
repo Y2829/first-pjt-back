@@ -1,4 +1,4 @@
-package com.y2829.whai.dto.chat;
+package com.y2829.whai.dto;
 
 import lombok.Getter;
 import lombok.Setter;

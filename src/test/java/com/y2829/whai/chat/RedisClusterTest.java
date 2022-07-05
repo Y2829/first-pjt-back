@@ -1,6 +1,6 @@
 package com.y2829.whai.chat;
 
-import com.y2829.whai.dto.chat.ChatRoom;
+import com.y2829.whai.dto.ChatRoom;
 import com.y2829.whai.repository.ChatRoomRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

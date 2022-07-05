@@ -1,7 +1,7 @@
-package com.y2829.whai.service.chat;
+package com.y2829.whai.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.y2829.whai.dto.chat.ChatMessage;
+import com.y2829.whai.dto.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
