@@ -1,4 +1,4 @@
-package com.y2829.whai.common.config;
+package com.y2829.whai.config;
 
 //import com.amazonaws.auth.AWSStaticCredentialsProvider;
 //import com.amazonaws.auth.BasicAWSCredentials;

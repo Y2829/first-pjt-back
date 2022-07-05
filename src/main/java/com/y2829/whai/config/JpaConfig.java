@@ -1,4 +1,4 @@
-package com.y2829.whai.common.config;
+package com.y2829.whai.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,4 +1,4 @@
-package com.y2829.whai.common.config;
+package com.y2829.whai.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.y2829.whai.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.y2829.whai.api.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

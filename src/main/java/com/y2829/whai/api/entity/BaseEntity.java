@@ -1,4 +1,4 @@
-package com.y2829.whai.entity;
+package com.y2829.whai.api.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,14 +19,14 @@ public class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long seq;
+    protected Long id;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BaseEntity baseEntity = (BaseEntity) o;
-        return Objects.equals(seq, baseEntity.seq);
+        return Objects.equals(id, baseEntity.id);
     }
 
 }

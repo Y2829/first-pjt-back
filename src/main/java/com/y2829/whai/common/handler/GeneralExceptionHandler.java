@@ -1,7 +1,7 @@
 package com.y2829.whai.common.handler;
 
-import com.y2829.whai.common.errors.NotFoundException;
-import com.y2829.whai.common.errors.UnauthorizedException;
+import com.y2829.whai.common.exception.UnauthorizedException;
+import com.y2829.whai.common.exception.NotFoundException;
 import com.y2829.whai.common.utils.ApiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

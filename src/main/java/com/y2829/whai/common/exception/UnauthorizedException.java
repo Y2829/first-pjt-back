@@ -1,4 +1,4 @@
-package com.y2829.whai.common.errors;
+package com.y2829.whai.common.exception;
 
 public class UnauthorizedException extends RuntimeException {
 
