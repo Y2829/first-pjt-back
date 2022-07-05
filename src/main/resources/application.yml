@@ -30,17 +30,3 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-
-  spring:
-    devtools:
-      livereload:
-        enabled: true
-      restart:
-        enabled: false
-      freemarker:
-        cache: false
-      profiles:
-        active:local
-
-
-
