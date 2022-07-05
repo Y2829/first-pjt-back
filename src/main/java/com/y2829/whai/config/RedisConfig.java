@@ -1,6 +1,6 @@
-package com.y2829.whai.common.config;
+package com.y2829.whai.config;
 
-import com.y2829.whai.service.RedisSubscriber;
+import com.y2829.whai.api.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

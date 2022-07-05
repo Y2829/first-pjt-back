@@ -1,4 +1,4 @@
-package com.y2829.whai.dto;
+package com.y2829.whai.api.dto;
 
 import lombok.Getter;
 import lombok.Setter;

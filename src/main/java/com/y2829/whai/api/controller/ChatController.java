@@ -1,6 +1,6 @@
-package com.y2829.whai.controller;
+package com.y2829.whai.api.controller;
 
-import com.y2829.whai.dto.ChatMessage;
+import com.y2829.whai.api.dto.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

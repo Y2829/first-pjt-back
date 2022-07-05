@@ -1,4 +1,4 @@
-package com.y2829.whai.common.config;
+package com.y2829.whai.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
