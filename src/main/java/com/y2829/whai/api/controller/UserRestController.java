@@ -7,8 +7,11 @@ import com.y2829.whai.api.service.UserService;
 import com.y2829.whai.common.utils.ApiUtils.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static com.y2829.whai.common.utils.ApiUtils.success;
 
@@ -30,27 +33,29 @@ public class UserRestController {
         );
     }
 
-    @PostMapping
+    @PostMapping("join")
     @Operation(summary = "회원 가입", description = "회원가입을 합니다.")
-    public ApiResult<UserDto.Response> registerUser() {
+    public ApiResult<Boolean> registerUser(@Valid @RequestBody UserDto.Join request) {
         return success(
-                null
+                userService.insertUser(request)
         );
     }
 
     @PutMapping
     @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
-    public ApiResult<UserDto.Response> modifyUser() {
+    public ApiResult<Boolean> modifyUser(@Valid @RequestBody UserDto.Join request) {
         return success(
-                null
+                userService.updateUser(request)
         );
     }
 
     @DeleteMapping
     @Operation(summary = "회원 탈퇴", description = "회원을 탈퇴합니다.")
-    public ApiResult<UserDto.Response> removeUser() {
+    public ApiResult<Boolean> removeUser() {
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         return success(
-                null
+                userService.deleteUser(principal.getUsername())
         );
     }
 
