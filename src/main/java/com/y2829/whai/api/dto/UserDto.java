@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 
 public class UserDto {
 
-    @Setter
+    @Builder
+    @Getter
     public static class Info {
         @NotNull
         private String userId;
@@ -44,10 +45,19 @@ public class UserDto {
         }
     }
 
-    @Setter
+    @Getter
     public static class Response {
-        private Info info;
-        private String profileUrl;
+        private final Info info;
+        private final String profileUrl;
+
+        public Response(User user) {
+            this.info = UserDto.Info.builder()
+                            .userId(user.getUserId())
+                            .name(user.getName())
+                            .email(user.getEmail())
+                            .build();
+            this.profileUrl = user.getProfileImageUrl();
+        }
     }
 
 }

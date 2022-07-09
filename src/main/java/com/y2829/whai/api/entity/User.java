@@ -1,5 +1,6 @@
 package com.y2829.whai.api.entity;
 
+import com.y2829.whai.api.dto.UserDto;
 import com.y2829.whai.oauth.entity.ProviderType;
 import com.y2829.whai.oauth.entity.RoleType;
 import lombok.*;

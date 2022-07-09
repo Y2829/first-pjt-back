@@ -1,13 +1,11 @@
 package com.y2829.whai.api.controller;
 
-import com.y2829.whai.api.entity.User;
 import com.y2829.whai.common.exception.NotFoundException;
 import com.y2829.whai.api.dto.UserDto;
 import com.y2829.whai.api.service.UserService;
 import com.y2829.whai.common.utils.ApiUtils.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +22,12 @@ public class UserRestController {
 
     @GetMapping
     @Operation(summary = "회원 조회", description = "회원을 조회합니다.")
-    public ApiResult<User> findUser() {
+    public ApiResult<UserDto.Response> findUser() {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return success(
                 userService.getUser(principal.getUsername())
+                        .map(UserDto.Response::new)
                         .orElseThrow(() -> new NotFoundException("no user found"))
         );
     }
