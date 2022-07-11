@@ -1,18 +1,18 @@
 package com.y2829.whai.api.controller;
 
 import com.y2829.whai.api.dto.ChatMessage;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RequiredArgsConstructor
 @Controller
 @Slf4j
-@CrossOrigin("*")
+@Api(tags = {"메세지 처리에 대한 Controller"})
 public class ChatController {
 
     private final static String NOTICE = "[알림]";

@@ -1,10 +1,11 @@
 package com.y2829.whai.api.controller;
 
-import com.y2829.whai.api.entity.User;
-import com.y2829.whai.common.exception.NotFoundException;
 import com.y2829.whai.api.dto.UserDto;
+import com.y2829.whai.api.entity.User;
 import com.y2829.whai.api.service.UserService;
+import com.y2829.whai.common.exception.NotFoundException;
 import com.y2829.whai.common.utils.ApiUtils.ApiResult;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,7 @@ import static com.y2829.whai.common.utils.ApiUtils.success;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/users")
+@Api(tags = {"회원 CRUD 정보를 제공하는 Controller"})
 public class UserRestController {
 
     private final UserService userService;

@@ -2,6 +2,7 @@ package com.y2829.whai.api.controller;
 
 import com.y2829.whai.api.dto.ChatRoom;
 import com.y2829.whai.api.repository.ChatRoomRepository;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/chat")
 @Slf4j
-@CrossOrigin("*")
+@Api(tags = {"Chat 기능에 대한 Controller"})
 public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
