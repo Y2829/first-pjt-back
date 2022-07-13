@@ -6,6 +6,7 @@ import com.y2829.whai.api.dto.UserDto;
 import com.y2829.whai.api.service.UserService;
 import com.y2829.whai.common.utils.ApiUtils.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import static com.y2829.whai.common.utils.ApiUtils.success;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/users")
+@Tag(name = "User API", description = "유저 API")
 public class UserRestController {
 
     private final UserService userService;

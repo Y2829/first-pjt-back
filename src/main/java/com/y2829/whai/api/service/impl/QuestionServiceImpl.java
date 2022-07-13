@@ -36,6 +36,7 @@ public class QuestionServiceImpl implements QuestionService {
         Question question = request.toEntity();
 
         // 유저 매칭
+        // null 예외 처리 필요
         User user = userRepository.findByUserId(request.getUserId());
         question.setUser(user);
 
