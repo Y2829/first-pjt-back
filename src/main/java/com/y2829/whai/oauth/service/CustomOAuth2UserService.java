@@ -43,8 +43,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         ProviderType providerType = ProviderType.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
 
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
-        // 옵셔널 수정 필요
-        User savedUser = userRepository.findByUserId(userInfo.getId());
+
+        User savedUser = userRepository.findByUserOauthId(userInfo.getId());
 
         if (savedUser != null) {
             if (providerType != savedUser.getProviderType()) {
@@ -65,7 +65,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         LocalDateTime now = LocalDateTime.now();
 
         User user = User.builder()
-                .userId(userInfo.getId())
+                .userOauthId(userInfo.getId())
                 .name(userInfo.getName())
                 .email(userInfo.getEmail())
                 .profileImageUrl(userInfo.getImageUrl())

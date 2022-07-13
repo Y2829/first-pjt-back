@@ -18,7 +18,7 @@ public class QuestionDto {
     @Getter
     @Setter
     public static class PostRequest {
-        private String userId;
+        private Long userId;
         private String title;
         private String content;
         private List<String> categories;
@@ -36,15 +36,26 @@ public class QuestionDto {
 
     @Getter
     @Setter
+    public static class PutRequest {
+        private Long userId;
+        private Long questionId;
+        private String title;
+        private String content;
+        private List<String> categories;
+        private List<MultipartFile> images;
+    }
+
+    @Getter
+    @Setter
     public static class SimpleQuestion {
-        private final String userId;
+        private final Long userId;
         private final String title;
         private final String content;
         private final List<String> categories;
         private final List<String> imageUrls;
 
         public SimpleQuestion(Question question) {
-            this.userId = question.getUser().getUserId();
+            this.userId = question.getUser().getId();
             this.title = question.getTitle();
             this.content = question.getContent();
             this.categories = question.getCategories().stream()

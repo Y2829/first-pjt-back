@@ -7,12 +7,20 @@ import org.springframework.data.domain.Pageable;
 
 public interface QuestionService {
 
+    Long saveQuestion(QuestionDto.PostRequest request);
+
+    Long modifyQuestion(QuestionDto.PutRequest request);
+
+    Long removeQuestion(Long userId, Long id);
+
     Question findQuestion(Long id);
 
     Page<Question> findAllQuestion(Pageable pageable);
 
-    Long saveQuestion(QuestionDto.PostRequest request);
+    Page<Question> findAllQuestionByUserId(Long userId, Pageable pageable);
 
-    Long removeQuestion(Long id);
+    Page<Question> findAllQuestionByCategoryId(Long categoryId, Pageable pageable);
+
+    Page<Question> findAllQuestionByCategorySubject(String subject, Pageable pageable);
 
 }

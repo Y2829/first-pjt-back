@@ -1,5 +1,6 @@
 package com.y2829.whai.api.entity;
 
+import com.y2829.whai.api.dto.QuestionDto;
 import com.y2829.whai.api.dto.Status;
 import lombok.*;
 
@@ -31,5 +32,10 @@ public class Question extends BaseEntity {
     private Status status;
 
     private LocalDateTime createAt;
+
+    public void update(QuestionDto.PutRequest request) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
+    }
 
 }

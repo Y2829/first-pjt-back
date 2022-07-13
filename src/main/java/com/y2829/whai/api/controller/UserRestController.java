@@ -25,7 +25,7 @@ public class UserRestController {
     @Operation(summary = "회원 조회", description = "회원을 조회합니다.")
     public ApiResult<User> findUser() {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+        System.out.println(principal.toString());
         return success(
                 userService.getUser(principal.getUsername())
                         .orElseThrow(() -> new NotFoundException("no user found"))

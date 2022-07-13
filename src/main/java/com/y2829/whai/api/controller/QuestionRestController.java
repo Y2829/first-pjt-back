@@ -30,11 +30,19 @@ public class QuestionRestController {
         );
     }
 
-    @DeleteMapping("{id}")
-    @Operation(summary = "질문 삭제", description = "질문을 삭제합니다.")
-    public ApiResult<Long> deleteQuestion(@PathVariable Long id) {
+    @PatchMapping
+    @Operation(summary = "질문 수정", description = "질문을 수정합니다.", security = { @SecurityRequirement(name = "bearer-key")})
+    public ApiResult<Long> putQuestion(@Valid @RequestBody PutRequest putRequest) {
         return success(
-                questionService.removeQuestion(id)
+                questionService.modifyQuestion(putRequest)
+        );
+    }
+
+    @DeleteMapping("{userId}/{id}")
+    @Operation(summary = "질문 삭제", description = "질문을 삭제합니다.", security = { @SecurityRequirement(name = "bearer-key")})
+    public ApiResult<Long> deleteQuestion(@PathVariable Long userId, @PathVariable Long id) {
+        return success(
+                questionService.removeQuestion(userId, id)
         );
     }
 
@@ -54,19 +62,27 @@ public class QuestionRestController {
         );
     }
 
-    @GetMapping("my")
-    @Operation(summary = "나의 질문 조회", description = "나의 모든 질문을 조회합니다.")
-    public ApiResult<PageResponse> getMyQuestions(Pageable pageable) {
+    @GetMapping("my/{userId}")
+    @Operation(summary = "나의 질문 조회", description = "나의 모든 질문을 조회합니다.", security = { @SecurityRequirement(name = "bearer-key")})
+    public ApiResult<PageResponse> getMyQuestions(@PathVariable Long userId, Pageable pageable) {
         return success(
-                new PageResponse(questionService.findAllQuestion(pageable))
+                new PageResponse(questionService.findAllQuestionByUserId(userId, pageable))
         );
     }
 
-    @GetMapping("category/{word}")
-    @Operation(summary = "카테고리별 질문 조회", description = "나의 모든 질문을 조회합니다.")
-    public ApiResult<PageResponse> getQuestionsByCategory(Pageable pageable, @PathVariable String word) {
+    @GetMapping("category/{categoryId}")
+    @Operation(summary = "카테고리별 질문 조회(카테고리 아이디)", description = "해당 카테고리의 질문을 조회합니다.")
+    public ApiResult<PageResponse> getQuestionsByCategoryId(@PathVariable Long categoryId, Pageable pageable) {
         return success(
-                new PageResponse(questionService.findAllQuestion(pageable))
+                new PageResponse(questionService.findAllQuestionByCategoryId(categoryId, pageable))
+        );
+    }
+
+    @GetMapping("category/{subject}")
+    @Operation(summary = "카테고리별 질문 조회(카테고리 단어)", description = "해당 카테고리의 질문을 조회합니다.")
+    public ApiResult<PageResponse> getQuestionsByCategorySubject(@PathVariable String subject, Pageable pageable) {
+        return success(
+                new PageResponse(questionService.findAllQuestionByCategorySubject(subject, pageable))
         );
     }
 

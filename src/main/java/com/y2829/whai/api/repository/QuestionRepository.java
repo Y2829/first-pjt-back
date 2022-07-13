@@ -16,7 +16,12 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findAll(Pageable pageable);
 
+    Page<Question> findByUserId(Long userId, Pageable pageable);
+
+    @Query("SELECT q FROM Question q JOIN Category c where c.id = :categoryId")
+    Page<Question> findByCategoryId(Long categoryId, Pageable pageable);
+
     @Query("SELECT q FROM Question q JOIN Category c where c.subject = :subject")
-    Page<Question> findByCategory(String subject, Pageable pageable);
+    Page<Question> findByCategorySubject(String subject, Pageable pageable);
 
 }
