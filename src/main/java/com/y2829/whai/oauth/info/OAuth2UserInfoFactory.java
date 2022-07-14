@@ -1,6 +1,7 @@
 package com.y2829.whai.oauth.info;
 
 import com.y2829.whai.oauth.entity.ProviderType;
+import com.y2829.whai.oauth.exception.OAuthProviderMissMatchException;
 import com.y2829.whai.oauth.info.impl.*;
 
 import java.util.Map;
@@ -14,6 +15,7 @@ public class OAuth2UserInfoFactory {
             case NAVER -> new NaverOAuth2UserInfo(attributes);
             case GOOGLE -> new GoogleOAuth2UserInfo(attributes);
             case FACEBOOK -> new FacebookOAuth2UserInfo(attributes);
+            default -> throw new OAuthProviderMissMatchException("miss match provider");
         };
     }
 

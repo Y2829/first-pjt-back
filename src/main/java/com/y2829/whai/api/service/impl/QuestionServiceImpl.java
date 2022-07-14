@@ -35,7 +35,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final UserRepository userRepository;
 
-
     @Override
     public Long saveQuestion(QuestionDto.PostRequest request) {
         Question question = request.toEntity();
@@ -58,7 +57,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         question.setCategories(newCategories);
 
-        // 이미지 매칭
+        // TODO 이미지 매칭
         List<Image> images = null;
         question.setImages(images);
 
@@ -97,7 +96,7 @@ public class QuestionServiceImpl implements QuestionService {
             categories.add(category);
         }
 
-        // 이미지 매칭
+        // TODO 이미지 매칭
         List<Image> images = null;
         question.setImages(images);
 

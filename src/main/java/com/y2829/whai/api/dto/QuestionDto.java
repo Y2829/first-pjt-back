@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,8 +19,11 @@ public class QuestionDto {
     @Getter
     @Setter
     public static class PostRequest {
+        @NotNull
         private Long userId;
+        @NotNull
         private String title;
+        @NotNull
         private String content;
         private List<String> categories;
         private List<MultipartFile> images;
@@ -37,9 +41,13 @@ public class QuestionDto {
     @Getter
     @Setter
     public static class PutRequest {
+        @NotNull
         private Long userId;
+        @NotNull
         private Long questionId;
+        @NotNull
         private String title;
+        @NotNull
         private String content;
         private List<String> categories;
         private List<MultipartFile> images;
@@ -48,6 +56,7 @@ public class QuestionDto {
     @Getter
     @Setter
     public static class SimpleQuestion {
+        private final Long questionId;
         private final Long userId;
         private final String title;
         private final String content;
@@ -55,6 +64,7 @@ public class QuestionDto {
         private final List<String> imageUrls;
 
         public SimpleQuestion(Question question) {
+            this.questionId = question.getId();
             this.userId = question.getUser().getId();
             this.title = question.getTitle();
             this.content = question.getContent();
@@ -70,7 +80,7 @@ public class QuestionDto {
     @Getter
     @Setter
     public static class PageResponse {
-        private Page<SimpleQuestion> questions;
+        private final Page<SimpleQuestion> questions;
 
         public PageResponse(Page<Question> questions) {
             List<SimpleQuestion> list = questions.stream()

@@ -5,7 +5,6 @@ import com.y2829.whai.oauth.entity.RoleType;
 import lombok.*;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,28 +15,22 @@ import java.time.LocalDateTime;
 @Entity
 public class User extends BaseEntity {
 
-    @NotNull
     private String userOauthId;
 
-    @NotNull
-    private String password;
-
-    @NotNull
-    private String name;
-
-    @NotNull
     private String email;
 
-    @NotNull
+    private String password;
+
+    private String name;
+
+    private String company;
+
     private String profileImageUrl;
 
-    @NotNull
     private ProviderType providerType;
 
-    @NotNull
     private RoleType roleType;
 
-    @NotNull
     private LocalDateTime createdAt;
 
 }

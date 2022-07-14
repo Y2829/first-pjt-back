@@ -13,10 +13,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class RefreshToken extends BaseEntity {
 
-    @NotNull
     private String userId;
 
-    @NotNull
     private String token;
 
 }

@@ -21,7 +21,6 @@ public class QuestionRestController {
 
     private final QuestionService questionService;
 
-
     @PostMapping
     @Operation(summary = "질문 등록", description = "질문을 등록합니다.", security = { @SecurityRequirement(name = "bearer-key")})
     public ApiResult<Long> postQuestion(@Valid @RequestBody PostRequest postRequest) {
@@ -46,7 +45,7 @@ public class QuestionRestController {
         );
     }
 
-    @GetMapping("{id}")
+    @GetMapping("detail")
     @Operation(summary = "질문 상세 조회", description = "질문의 상세 정보를 조회합니다.")
     public ApiResult<SimpleQuestion> getQuestion(@PathVariable Long id) {
         return success(

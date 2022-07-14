@@ -47,7 +47,6 @@ public class SecurityConfig {
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
     private final RefreshTokenRepository refreshTokenRepository;
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
@@ -73,10 +72,10 @@ public class SecurityConfig {
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**",
                         "/webjars/**", "/api-docs/**", "/configuration/**").permitAll()
-                .antMatchers("/api/v1/questions/page").permitAll()
-                .antMatchers("/api/v1/questions/**").hasAnyAuthority(RoleType.USER.getCode())
-//                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
-//                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
+                .antMatchers("/api/v1/questions/all", "/api/v1/questions/detail",
+                        "/api/v1/questions/category/**").permitAll()
+                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
+                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
                 .anyRequest().authenticated()
             .and()
                 .oauth2Login()
