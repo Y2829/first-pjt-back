@@ -14,10 +14,10 @@ import javax.validation.Valid;
 import static com.y2829.whai.api.dto.UserDto.*;
 import static com.y2829.whai.common.utils.ApiUtils.success;
 
+@Tag(name = "User API", description = "유저 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/users")
-@Tag(name = "User API", description = "유저 API")
 public class UserRestController {
 
     private final UserService userService;
