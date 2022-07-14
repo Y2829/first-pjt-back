@@ -74,6 +74,7 @@ public class SecurityConfig {
                         "/webjars/**", "/api-docs/**", "/configuration/**").permitAll()
                 .antMatchers("/api/v1/questions/all", "/api/v1/questions/detail",
                         "/api/v1/questions/category/**").permitAll()
+                .antMatchers("/api/v1/category/**").permitAll()
                 .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
                 .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
                 .anyRequest().authenticated()
