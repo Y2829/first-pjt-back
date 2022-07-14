@@ -51,3 +51,7 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth/redirect
+
+#logging:
+#  level:
+#    root: DEBUG

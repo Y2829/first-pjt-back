@@ -5,6 +5,7 @@ import com.y2829.whai.api.dto.UserDto;
 import com.y2829.whai.api.service.UserService;
 import com.y2829.whai.common.utils.ApiUtils.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import static com.y2829.whai.common.utils.ApiUtils.success;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/users")
+@Tag(name = "User API", description = "유저 API")
 public class UserRestController {
 
     private final UserService userService;
@@ -24,7 +26,7 @@ public class UserRestController {
     @Operation(summary = "회원 조회", description = "회원을 조회합니다.")
     public ApiResult<UserDto.Response> findUser() {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+        System.out.println(principal.toString());
         return success(
                 userService.getUser(principal.getUsername())
                         .map(UserDto.Response::new)
