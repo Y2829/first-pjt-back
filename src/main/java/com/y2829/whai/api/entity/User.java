@@ -1,6 +1,5 @@
 package com.y2829.whai.api.entity;
 
-import com.y2829.whai.api.dto.UserDto;
 import com.y2829.whai.oauth.entity.ProviderType;
 import com.y2829.whai.oauth.entity.RoleType;
 import lombok.*;
@@ -16,13 +15,15 @@ import java.time.LocalDateTime;
 @Entity
 public class User extends BaseEntity {
 
-    private String userId;
+    private String userOauthId;
+
+    private String email;
 
     private String password;
 
     private String name;
 
-    private String email;
+    private String company;
 
     private String profileImageUrl;
 

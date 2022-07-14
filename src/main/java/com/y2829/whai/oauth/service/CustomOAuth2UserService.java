@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,9 +45,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
 
-        User savedUser = userRepository.findByUserOauthId(userInfo.getId());
+        Optional<User> optionalSavedUser = userRepository.findByUserOauthId(userInfo.getId());
+        User savedUser = null;
 
-        if (savedUser != null) {
+        if (optionalSavedUser.isPresent()) {
+            savedUser = optionalSavedUser.get();
             if (providerType != savedUser.getProviderType()) {
                 throw new OAuthProviderMissMatchException(
                         "Looks like you're signed up with " + providerType +

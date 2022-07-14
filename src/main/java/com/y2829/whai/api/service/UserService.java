@@ -8,12 +8,10 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Optional<User> getUser(String userId);
+    Long modifyUser(UserDto.PutRequest request, String userOauthId);
 
-    Boolean insertUser(UserDto.Join request);
+    Long removeUser(Long userId, String userOauthId);
 
-    Boolean updateUser(UserDto.Join request);
-
-    Boolean deleteUser(String userId);
+    User findUser(String userOauthId);
 
 }
