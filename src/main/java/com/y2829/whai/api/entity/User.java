@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class User extends BaseEntity {
 
     @NotNull
-    private String userId;
+    private String userOauthId;
 
     @NotNull
     private String password;
