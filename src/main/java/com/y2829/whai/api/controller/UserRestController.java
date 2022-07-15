@@ -23,7 +23,7 @@ public class UserRestController {
     private final UserService userService;
 
     @PatchMapping
-    @Operation(summary = "회사 정보 삽입", description = "회사 정보를 삽입합니다.", security = { @SecurityRequirement(name = "bearer-key")})
+    @Operation(summary = "회사 정보 삽입", description = "회사 정보를 삽입합니다.", security = { @SecurityRequirement(name = "bearer-key")}, deprecated = true)
     public ApiResult<Long> patchUser(@Valid @RequestBody PatchUserRequest request) {
         org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
