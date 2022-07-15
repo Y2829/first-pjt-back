@@ -1,12 +1,13 @@
 package com.y2829.whai.api.entity;
 
-import com.y2829.whai.api.dto.QuestionDto;
 import com.y2829.whai.api.dto.Status;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.y2829.whai.api.dto.QuestionDto.*;
 
 @Getter
 @Setter
@@ -33,7 +34,7 @@ public class Question extends BaseEntity {
 
     private LocalDateTime createAt;
 
-    public void update(QuestionDto.PutRequest request) {
+    public void update(PatchQuestionRequest request) {
         this.title = request.getTitle();
         this.content = request.getContent();
     }

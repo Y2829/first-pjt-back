@@ -1,14 +1,12 @@
 package com.y2829.whai.api.service;
 
-import com.y2829.whai.api.dto.UserDto;
 import com.y2829.whai.api.entity.User;
 
-import javax.swing.text.html.Option;
-import java.util.Optional;
+import static com.y2829.whai.api.dto.UserDto.*;
 
 public interface UserService {
 
-    Long modifyUser(UserDto.PutRequest request, String userOauthId);
+    Long modifyUser(PatchUserRequest request, String userOauthId);
 
     Long removeUser(Long userId, String userOauthId);
 

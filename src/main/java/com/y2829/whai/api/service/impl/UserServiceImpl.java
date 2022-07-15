@@ -1,6 +1,5 @@
 package com.y2829.whai.api.service.impl;
 
-import com.y2829.whai.api.dto.UserDto;
 import com.y2829.whai.api.entity.User;
 import com.y2829.whai.api.repository.UserRepository;
 import com.y2829.whai.api.service.UserService;
@@ -10,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.y2829.whai.api.dto.UserDto.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -18,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Long modifyUser(UserDto.PutRequest request, String userOauthId) {
+    public Long modifyUser(PatchUserRequest request, String userOauthId) {
         User user = userRepository.findByUserOauthId(userOauthId)
                 .orElseThrow(() -> new NotFoundException("Not found user"));
 

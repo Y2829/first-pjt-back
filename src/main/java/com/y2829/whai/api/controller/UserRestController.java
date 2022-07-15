@@ -22,9 +22,9 @@ public class UserRestController {
 
     private final UserService userService;
 
-    @PutMapping
+    @PatchMapping
     @Operation(summary = "회사 정보 삽입", description = "회사 정보를 삽입합니다.", security = { @SecurityRequirement(name = "bearer-key")})
-    public ApiResult<Long> modifyUser(@Valid @RequestBody PutRequest request) {
+    public ApiResult<Long> patchUser(@Valid @RequestBody PatchUserRequest request) {
         org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -35,7 +35,7 @@ public class UserRestController {
 
     @DeleteMapping("{userId}")
     @Operation(summary = "회원 탈퇴", description = "회원을 탈퇴합니다.", security = { @SecurityRequirement(name = "bearer-key")})
-    public ApiResult<Long> removeUser(@PathVariable Long userId) {
+    public ApiResult<Long> deleteUser(@PathVariable Long userId) {
         org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -46,7 +46,7 @@ public class UserRestController {
 
     @GetMapping
     @Operation(summary = "회원 조회", description = "회원을 조회합니다.", security = { @SecurityRequirement(name = "bearer-key")})
-    public ApiResult<SimpleUser> findUser() {
+    public ApiResult<SimpleUser> getUser() {
         org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

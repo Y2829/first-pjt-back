@@ -1,6 +1,5 @@
 package com.y2829.whai.api.service.impl;
 
-import com.y2829.whai.api.dto.QuestionDto;
 import com.y2829.whai.api.entity.Question;
 import com.y2829.whai.api.entity.Category;
 import com.y2829.whai.api.entity.Image;
@@ -18,10 +17,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.y2829.whai.api.dto.QuestionDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final UserRepository userRepository;
 
     @Override
-    public Long saveQuestion(QuestionDto.PostRequest request) {
+    public Long saveQuestion(PostQuestionRequest request) {
         Question question = request.toEntity();
 
         // 유저 매칭
@@ -65,7 +65,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Long modifyQuestion(QuestionDto.PutRequest request) {
+    public Long modifyQuestion(PatchQuestionRequest request) {
         Question question = questionRepository.findById(request.getQuestionId())
                 .orElseThrow(() -> new NotFoundException("Not found question"));
 

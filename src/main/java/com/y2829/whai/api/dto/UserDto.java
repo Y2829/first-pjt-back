@@ -11,7 +11,7 @@ public class UserDto {
 
     @Getter
     @Setter
-    public static class PutRequest {
+    public static class PatchUserRequest {
         @NotNull
         private Long userId;
         @NotNull

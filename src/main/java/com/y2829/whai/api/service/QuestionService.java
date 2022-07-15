@@ -1,15 +1,16 @@
 package com.y2829.whai.api.service;
 
-import com.y2829.whai.api.dto.QuestionDto;
 import com.y2829.whai.api.entity.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import static com.y2829.whai.api.dto.QuestionDto.*;
+
 public interface QuestionService {
 
-    Long saveQuestion(QuestionDto.PostRequest request);
+    Long saveQuestion(PostQuestionRequest request);
 
-    Long modifyQuestion(QuestionDto.PutRequest request);
+    Long modifyQuestion(PatchQuestionRequest request);
 
     Long removeQuestion(Long userId, Long id);
 

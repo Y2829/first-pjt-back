@@ -23,7 +23,7 @@ public class QuestionRestController {
 
     @PostMapping
     @Operation(summary = "질문 등록", description = "질문을 등록합니다.", security = { @SecurityRequirement(name = "bearer-key")})
-    public ApiResult<Long> postQuestion(@Valid @RequestBody PostRequest postRequest) {
+    public ApiResult<Long> postQuestion(@Valid @RequestBody PostQuestionRequest postRequest) {
         return success(
                 questionService.saveQuestion(postRequest)
         );
@@ -31,9 +31,9 @@ public class QuestionRestController {
 
     @PatchMapping
     @Operation(summary = "질문 수정", description = "질문을 수정합니다.", security = { @SecurityRequirement(name = "bearer-key")})
-    public ApiResult<Long> putQuestion(@Valid @RequestBody PutRequest putRequest) {
+    public ApiResult<Long> patchQuestion(@Valid @RequestBody PatchQuestionRequest patchRequest) {
         return success(
-                questionService.modifyQuestion(putRequest)
+                questionService.modifyQuestion(patchRequest)
         );
     }
 
@@ -45,7 +45,7 @@ public class QuestionRestController {
         );
     }
 
-    @GetMapping("detail")
+    @GetMapping("detail/{id}")
     @Operation(summary = "질문 상세 조회", description = "질문의 상세 정보를 조회합니다.")
     public ApiResult<SimpleQuestion> getQuestion(@PathVariable Long id) {
         return success(
@@ -55,33 +55,33 @@ public class QuestionRestController {
 
     @GetMapping("all")
     @Operation(summary = "전체 질문 조회", description = "모든 질문을 조회합니다.")
-    public ApiResult<PageResponse> getQuestions(Pageable pageable) {
+    public ApiResult<PageQuestionResponse> getQuestions(Pageable pageable) {
         return success(
-                new PageResponse(questionService.findAllQuestion(pageable))
+                new PageQuestionResponse(questionService.findAllQuestion(pageable))
         );
     }
 
     @GetMapping("my/{userId}")
     @Operation(summary = "나의 질문 조회", description = "나의 모든 질문을 조회합니다.", security = { @SecurityRequirement(name = "bearer-key")})
-    public ApiResult<PageResponse> getMyQuestions(@PathVariable Long userId, Pageable pageable) {
+    public ApiResult<PageQuestionResponse> getMyQuestions(@PathVariable Long userId, Pageable pageable) {
         return success(
-                new PageResponse(questionService.findAllQuestionByUserId(userId, pageable))
+                new PageQuestionResponse(questionService.findAllQuestionByUserId(userId, pageable))
         );
     }
 
     @GetMapping("category/{categoryId}")
     @Operation(summary = "카테고리별 질문 조회(카테고리 아이디)", description = "해당 카테고리의 질문을 조회합니다.")
-    public ApiResult<PageResponse> getQuestionsByCategoryId(@PathVariable Long categoryId, Pageable pageable) {
+    public ApiResult<PageQuestionResponse> getQuestionsByCategoryId(@PathVariable Long categoryId, Pageable pageable) {
         return success(
-                new PageResponse(questionService.findAllQuestionByCategoryId(categoryId, pageable))
+                new PageQuestionResponse(questionService.findAllQuestionByCategoryId(categoryId, pageable))
         );
     }
 
     @GetMapping("category/{subject}")
     @Operation(summary = "카테고리별 질문 조회(카테고리 단어)", description = "해당 카테고리의 질문을 조회합니다.")
-    public ApiResult<PageResponse> getQuestionsByCategorySubject(@PathVariable String subject, Pageable pageable) {
+    public ApiResult<PageQuestionResponse> getQuestionsByCategorySubject(@PathVariable String subject, Pageable pageable) {
         return success(
-                new PageResponse(questionService.findAllQuestionByCategorySubject(subject, pageable))
+                new PageQuestionResponse(questionService.findAllQuestionByCategorySubject(subject, pageable))
         );
     }
 

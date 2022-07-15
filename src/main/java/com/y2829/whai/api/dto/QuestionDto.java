@@ -18,7 +18,7 @@ public class QuestionDto {
 
     @Getter
     @Setter
-    public static class PostRequest {
+    public static class PostQuestionRequest {
         @NotNull
         private Long userId;
         @NotNull
@@ -40,7 +40,7 @@ public class QuestionDto {
 
     @Getter
     @Setter
-    public static class PutRequest {
+    public static class PatchQuestionRequest {
         @NotNull
         private Long userId;
         @NotNull
@@ -79,10 +79,10 @@ public class QuestionDto {
 
     @Getter
     @Setter
-    public static class PageResponse {
+    public static class PageQuestionResponse {
         private final Page<SimpleQuestion> questions;
 
-        public PageResponse(Page<Question> questions) {
+        public PageQuestionResponse(Page<Question> questions) {
             List<SimpleQuestion> list = questions.stream()
                     .map(SimpleQuestion::new)
                     .collect(Collectors.toList());
