@@ -19,7 +19,7 @@ public class CategoryRestController {
     private final CategoryService categoryService;
 
     @GetMapping
-    @Operation(summary = "카테고리 조회", description = "모든 카테고리를 조회합니다.")
+    @Operation(summary = "모든 카테고리 조회", description = "모든 카테고리를 조회합니다.")
     public ApiResult<ListCategoryResponse> getCategory() {
         return success(
             new ListCategoryResponse(categoryService.findAllCategory())

@@ -1,13 +1,7 @@
 package com.y2829.whai.api.service.impl;
 
-import com.y2829.whai.api.entity.Question;
-import com.y2829.whai.api.entity.Category;
-import com.y2829.whai.api.entity.Image;
-import com.y2829.whai.api.entity.User;
-import com.y2829.whai.api.repository.CategoryRepository;
-import com.y2829.whai.api.repository.ImageRepository;
-import com.y2829.whai.api.repository.QuestionRepository;
-import com.y2829.whai.api.repository.UserRepository;
+import com.y2829.whai.api.entity.*;
+import com.y2829.whai.api.repository.*;
 import com.y2829.whai.api.service.QuestionService;
 import com.y2829.whai.common.exception.NotFoundException;
 import com.y2829.whai.common.exception.UnauthorizedException;
@@ -15,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,11 +27,14 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final CategoryRepository categoryRepository;
 
+    private final QuestionCategoryRepository questionCategoryRepository;
+
     private final ImageRepository imageRepository;
 
     private final UserRepository userRepository;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long saveQuestion(PostQuestionRequest request) {
         Question question = request.toEntity();
 
@@ -50,21 +49,28 @@ public class QuestionServiceImpl implements QuestionService {
 
         for (String word : categories) {
             Category category = categoryRepository.findBySubject(word)
-                    .orElse(categoryRepository.save(Category.builder().subject(word).build()));
+                    .orElseGet(() -> categoryRepository.save(Category.builder().subject(word).build()));
 
             newCategories.add(category);
         }
-
-        question.setCategories(newCategories);
 
         // TODO 이미지 매칭
         List<Image> images = null;
         question.setImages(images);
 
-        return questionRepository.save(question).getId();
+        Question newQuestion = questionRepository.save(question);
+
+        // 연관 관계 매핑
+        List<QuestionCategory> questionCategoryList = newCategories.stream()
+                .map(category -> new QuestionCategory(newQuestion, category)).toList();
+
+        questionCategoryRepository.saveAll(questionCategoryList);
+
+        return newQuestion.getId();
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long modifyQuestion(PatchQuestionRequest request) {
         Question question = questionRepository.findById(request.getQuestionId())
                 .orElseThrow(() -> new NotFoundException("Not found question"));
@@ -78,32 +84,52 @@ public class QuestionServiceImpl implements QuestionService {
         question.update(request);
 
         // 카테고리 매칭
-        List<Category> categories = question.getCategories();
+        List<QuestionCategory> questionCategoryList = question.getCategories();
 
-        Set<String> categorySet = categories.stream()
+        Set<String> categorySet = questionCategoryList.stream()
+                .map(QuestionCategory::getCategory)
                 .map(Category::getSubject)
                 .collect(Collectors.toSet());
 
-        List<String> newCategories = request.getCategories();
+        List<String> requestCategories = request.getCategories();
+        List<Category> newCategories = new ArrayList<>();
 
-        for (String word : newCategories) {
+        for (String word : requestCategories) {
             // 추가되는 카테고리가 있는지 확인
             if (categorySet.contains(word)) continue;
 
             Category category = categoryRepository.findBySubject(word)
-                    .orElse(categoryRepository.save(Category.builder().subject(word).build()));
+                    .orElseGet(() -> categoryRepository.save(Category.builder().subject(word).build()));
 
-            categories.add(category);
+            newCategories.add(category);
         }
 
         // TODO 이미지 매칭
         List<Image> images = null;
         question.setImages(images);
 
-        return questionRepository.save(question).getId();
+        Question newQuestion = questionRepository.save(question);
+
+        // 연관 관계 매핑
+        List<QuestionCategory> newQuestionCategoryList = newCategories.stream()
+                .map(category -> new QuestionCategory(newQuestion, category)).toList();
+
+        questionCategoryRepository.saveAll(newQuestionCategoryList);
+
+        // 수정되어 제거된 카테고리 삭제
+        Set<String> newCategorySet = new HashSet<>(request.getCategories());
+
+        for (QuestionCategory qc : questionCategoryList) {
+            if (!newCategorySet.contains(qc.getCategory().getSubject())) {
+                questionCategoryRepository.delete(qc);
+            }
+        }
+
+        return newQuestion.getId();
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long removeQuestion(Long userId, Long id) {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Not found question"));
@@ -118,27 +144,32 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Question findQuestion(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Not found question"));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Question> findAllQuestion(Pageable pageable) {
         return questionRepository.findAll(pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByUserId(Long userId, Pageable pageable) {
         return questionRepository.findByUserId(userId, pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByCategoryId(Long categoryId, Pageable pageable) {
         return questionRepository.findByCategoryId(categoryId, pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByCategorySubject(String subject, Pageable pageable) {
         return questionRepository.findByCategorySubject(subject, pageable);
     }

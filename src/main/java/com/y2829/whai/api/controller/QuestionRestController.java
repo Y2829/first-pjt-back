@@ -61,8 +61,8 @@ public class QuestionRestController {
         );
     }
 
-    @GetMapping("my/{userId}")
-    @Operation(summary = "나의 질문 조회", description = "나의 모든 질문을 조회합니다.", security = { @SecurityRequirement(name = "bearer-key")})
+    @GetMapping("user/{userId}")
+    @Operation(summary = "사용자별 질문 조회", description = "해당 사용자의 모든 질문을 조회합니다.", security = { @SecurityRequirement(name = "bearer-key")})
     public ApiResult<PageQuestionResponse> getMyQuestions(@PathVariable Long userId, Pageable pageable) {
         return success(
                 new PageQuestionResponse(questionService.findAllQuestionByUserId(userId, pageable))
@@ -77,7 +77,7 @@ public class QuestionRestController {
         );
     }
 
-    @GetMapping("category/{subject}")
+    @GetMapping("category/word/{subject}")
     @Operation(summary = "카테고리별 질문 조회(카테고리 단어)", description = "해당 카테고리의 질문을 조회합니다.")
     public ApiResult<PageQuestionResponse> getQuestionsByCategorySubject(@PathVariable String subject, Pageable pageable) {
         return success(

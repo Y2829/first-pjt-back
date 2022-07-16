@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long modifyUser(PatchUserRequest request, String userOauthId) {
         User user = userRepository.findByUserOauthId(userOauthId)
                 .orElseThrow(() -> new NotFoundException("Not found user"));
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long removeUser(Long userId, String userOauthId) {
         User user = userRepository.findByUserOauthId(userOauthId)
                 .orElseThrow(() -> new NotFoundException("Not found user"));

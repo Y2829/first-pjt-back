@@ -20,10 +20,10 @@ public class Question extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Category> categories;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade = CascadeType.REMOVE)
+    private List<QuestionCategory> categories;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Image> images;
 
     private String title;

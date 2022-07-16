@@ -3,6 +3,7 @@ package com.y2829.whai.api.dto;
 import com.y2829.whai.api.entity.Question;
 import com.y2829.whai.api.entity.Category;
 import com.y2829.whai.api.entity.Image;
+import com.y2829.whai.api.entity.QuestionCategory;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
@@ -69,6 +70,7 @@ public class QuestionDto {
             this.title = question.getTitle();
             this.content = question.getContent();
             this.categories = question.getCategories().stream()
+                    .map(QuestionCategory::getCategory)
                     .map(Category::getSubject)
                     .collect(Collectors.toList());
             this.imageUrls = question.getImages().stream()

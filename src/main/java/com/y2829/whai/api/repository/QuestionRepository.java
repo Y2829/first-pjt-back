@@ -18,10 +18,10 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findByUserId(Long userId, Pageable pageable);
 
-    @Query("SELECT q FROM Question q JOIN Category c where c.id = :categoryId")
+    @Query(value = "SELECT q FROM Question q JOIN QuestionCategory qc ON q = qc.question WHERE qc.category.id = :categoryId")
     Page<Question> findByCategoryId(Long categoryId, Pageable pageable);
 
-    @Query("SELECT q FROM Question q JOIN Category c where c.subject = :subject")
+    @Query(value = "SELECT q FROM Question q JOIN QuestionCategory qc ON q = qc.question WHERE qc.category.subject = :subject")
     Page<Question> findByCategorySubject(String subject, Pageable pageable);
 
 }
