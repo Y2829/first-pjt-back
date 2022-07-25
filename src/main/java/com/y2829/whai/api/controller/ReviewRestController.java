@@ -28,7 +28,7 @@ public class ReviewRestController {
         );
     }
 
-    @GetMapping("allReview")
+    @GetMapping("/list")
     @Operation(summary = "전체 리뷰 조회", description = "모든 리뷰를 조회합니다.")
     public ApiResult<ReviewDto.ReviewResponse> getReviews(Pageable pageable) {
         return success(
