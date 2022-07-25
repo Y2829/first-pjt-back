@@ -1,7 +1,4 @@
 server:
-  address: localhost
-  port: 8081
-
   servlet:
     context-path: /
     encoding:
@@ -10,11 +7,11 @@ server:
 
 spring:
   profiles:
-    include: oauth
+    include: oauth, real
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
