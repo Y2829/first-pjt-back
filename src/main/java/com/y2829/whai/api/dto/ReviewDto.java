@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,11 +15,14 @@ public class ReviewDto {
 
     @Setter
     @Getter
-    public static class RequestReview {
-
+    public static class PostReviewRequest {
+        @NotNull
         private Long userId;
+        @NotNull
         private Long mentorId;
+        @NotNull
         private Integer grade;
+        @NotNull
         private String content;
 
         public Review toEntity() {
@@ -32,24 +36,28 @@ public class ReviewDto {
 
     @Getter
     @Setter
-    public static class PutRequestReview {
+    public static class PatchReviewRequest {
+        @NotNull
         private Long reviewId;
+        @NotNull
         private Long userId;
+        @NotNull
         private Long mentorId;
+        @NotNull
         private Integer grade;
+        @NotNull
         private String content;
     }
 
     @Getter
     @Setter
-    public static class ViewReview {
-
+    public static class SimpleReview {
         private Long userId;
         private Long mentorId;
         private Integer grade;
         private String content;
-        public ViewReview(Review review) {
 
+        public SimpleReview(Review review) {
             this.userId = review.getUser().getId();
             this.mentorId = review.getMentor().getId();
             this.grade = review.getGrade();
@@ -61,11 +69,11 @@ public class ReviewDto {
     @Getter
     @Setter
     public static class ReviewResponse {
-        private Page<ViewReview> reviews;
+        private Page<SimpleReview> reviews;
         public ReviewResponse(Page<Review> reviews) {
 
-            List<ViewReview> allReview = reviews.stream()
-                    .map(ViewReview::new)
+            List<SimpleReview> allReview = reviews.stream()
+                    .map(SimpleReview::new)
                     .collect(Collectors.toList());
 
             this.reviews = new PageImpl<>(allReview);

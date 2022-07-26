@@ -1,6 +1,5 @@
 package com.y2829.whai.api.service.impl;
 
-import com.y2829.whai.api.dto.ReviewDto;
 import com.y2829.whai.api.entity.Review;
 import com.y2829.whai.api.entity.User;
 import com.y2829.whai.api.repository.ReviewRepository;
@@ -11,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import static com.y2829.whai.api.dto.ReviewDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserRepository userRepository;
 
     @Override
-    public Long saveReview(ReviewDto.RequestReview requestReview) {
+    public Long saveReview(PostReviewRequest requestReview) {
 
         Review review = requestReview.toEntity();
 
@@ -37,7 +38,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Long modifyReview(ReviewDto.PutRequestReview request) {
+    public Long modifyReview(PatchReviewRequest request) {
 
         Review review = reviewRepository.findById(request.getReviewId())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_REVIEW));

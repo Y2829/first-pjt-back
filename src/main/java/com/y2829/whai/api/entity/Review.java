@@ -28,7 +28,7 @@ public class Review extends BaseEntity {
 
     private LocalDateTime createAt;
 
-    public void update(ReviewDto.PutRequestReview request) {
+    public void update(ReviewDto.PatchReviewRequest request) {
         this.content = request.getContent();
         this.grade = request.getGrade();
     }
