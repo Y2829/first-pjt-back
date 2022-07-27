@@ -18,10 +18,17 @@ public interface QuestionService {
 
     Page<Question> findAllQuestion(Pageable pageable);
 
-    Page<Question> findAllQuestionByUserId(Long userId, Pageable pageable);
+    Page<Question> findAllQuestionByUserOauthId(String userOauthId, Pageable pageable);
 
     Page<Question> findAllQuestionByCategoryId(Long categoryId, Pageable pageable);
 
     Page<Question> findAllQuestionByCategorySubject(String subject, Pageable pageable);
+
+    Page<Question> findAllQuestionByTitle(String title, Pageable pageable);
+
+    Page<Question> findAllQuestionByContent(String content, Pageable pageable);
+
+    Page<Question> findAllQuestionByUserName(String name, Pageable pageable);
+
 
 }

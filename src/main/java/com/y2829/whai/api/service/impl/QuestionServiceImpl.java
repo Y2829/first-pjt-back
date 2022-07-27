@@ -158,8 +158,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Question> findAllQuestionByUserId(Long userId, Pageable pageable) {
-        return questionRepository.findByUserId(userId, pageable);
+    public Page<Question> findAllQuestionByUserOauthId(String userOauthId, Pageable pageable) {
+        return questionRepository.findByUserUserOauthId(userOauthId, pageable);
     }
 
     @Override
@@ -172,6 +172,24 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByCategorySubject(String subject, Pageable pageable) {
         return questionRepository.findByCategorySubject(subject, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllQuestionByTitle(String title, Pageable pageable) {
+        return questionRepository.findByTitleLike(title, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllQuestionByContent(String content, Pageable pageable) {
+        return questionRepository.findByContentLike(content, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllQuestionByUserName(String name, Pageable pageable) {
+        return questionRepository.findByUserName(name, pageable);
     }
 
 }
