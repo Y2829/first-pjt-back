@@ -5,16 +5,15 @@ import com.y2829.whai.api.repository.*;
 import com.y2829.whai.api.service.QuestionService;
 import com.y2829.whai.common.exception.NotFoundException;
 import com.y2829.whai.common.exception.UnauthorizedException;
+import com.y2829.whai.common.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.y2829.whai.api.dto.QuestionDto.*;
@@ -32,6 +31,8 @@ public class QuestionServiceImpl implements QuestionService {
     private final ImageRepository imageRepository;
 
     private final UserRepository userRepository;
+
+    private final S3Uploader s3Uploader;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -54,11 +55,20 @@ public class QuestionServiceImpl implements QuestionService {
             newCategories.add(category);
         }
 
-        // TODO 이미지 매칭
-        List<Image> images = null;
-        question.setImages(images);
-
         Question newQuestion = questionRepository.save(question);
+
+        // TODO 이미지 매칭
+
+        List<Image> images = new ArrayList<>();
+
+        request.getImages().forEach(image -> {
+            String storePath = "question/" + newQuestion.getId();
+            String randomFileName = UUID.randomUUID().toString();
+            s3Uploader.upload(image, storePath, randomFileName);
+        });
+
+
+        question.setImages(images);
 
         // 연관 관계 매핑
         List<QuestionCategory> questionCategoryList = newCategories.stream()

@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    s3:
+      bucket: whai-bucket
+    credentials:
+      access-key: AKIAUAWH3RAPF6OQLPO6
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

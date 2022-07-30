@@ -32,7 +32,7 @@ public class Question extends BaseEntity {
 
     private Status status;
 
-    private LocalDateTime createAt;
+    private LocalDateTime createAt = LocalDateTime.now();
 
     public void update(PatchQuestionRequest request) {
         this.title = request.getTitle();
