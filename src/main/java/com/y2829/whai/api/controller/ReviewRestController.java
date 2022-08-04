@@ -38,8 +38,16 @@ public class ReviewRestController {
         );
     }
 
+    @GetMapping("/mentor/{mentorId}")
+    @Operation(summary = "멘토의 리뷰 조회", description = "해당 멘토의 리뷰를 조회 합니다.", security = {@SecurityRequirement(name = "bearer-key")})
+    public ApiResult<PageReviewResponse> getReviewByMentorId(@PathVariable Long mentorId, Pageable pageable) {
+        return success(
+                new PageReviewResponse(reviewService.findReviewByMentorId(mentorId, pageable))
+        );
+    }
+
     @PatchMapping
-    @Operation(summary = "리뷰 수정", description = "리뷰를 수정합니다.", security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(summary = "리뷰 수정", description = "리뷰를 수정합니다.", security = {@SecurityRequirement(name = "bearer-key")})
     public ApiResult<Long> modifyReviews(@Valid @RequestBody PatchReviewRequest request) {
         return success(
                 reviewService.modifyReview(request)

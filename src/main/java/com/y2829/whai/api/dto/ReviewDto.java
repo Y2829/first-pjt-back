@@ -80,4 +80,17 @@ public class ReviewDto {
         }
     }
 
+    @Getter
+    @Setter
+    public static class PageReviewResponse {
+        private final Page<SimpleReview> reviews;
+
+        public PageReviewResponse(Page<Review> reviews) {
+            List<SimpleReview> list = reviews.stream()
+                    .map(SimpleReview::new)
+                    .collect(Collectors.toList());
+            this.reviews = new PageImpl<>(list);
+        }
+    }
+
 }

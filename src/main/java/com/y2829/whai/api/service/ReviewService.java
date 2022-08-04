@@ -14,5 +14,7 @@ public interface ReviewService {
 
     Page<Review> findAll(Pageable pageable);
 
+    Page<Review> findReviewByMentorId(Long mentorId, Pageable pageable);
+
     Long removeReview(Long userId, Long reviewId);
 }

@@ -61,6 +61,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public Page<Review> findReviewByMentorId(Long mentorId, Pageable pageable) {
+        return reviewRepository.findByMentorId(mentorId, pageable);
+    }
+
+    @Override
     public Long removeReview(Long userId, Long reviewId) {
 
         Review review = reviewRepository.findById(reviewId)
