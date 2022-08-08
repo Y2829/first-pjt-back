@@ -1,8 +1,7 @@
 package com.y2829.whai.common.utils;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.y2829.whai.common.exception.FailConvertException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -14,8 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.amazonaws.services.s3.model.DeleteObjectsRequest.*;
 
 
 @Component
@@ -70,6 +71,28 @@ public class S3Uploader {
             throw new FailConvertException("잘못된 파일입니다.");
         }
         return Optional.of(convertFile);
+    }
+
+    public void delete(String fileName) {
+        DeleteObjectRequest request = new DeleteObjectRequest(bucket, fileName);
+        amazonS3Client.deleteObject(request);
+    }
+
+    public List<File> getFolder(String folderName) {
+        List<File> result = null;
+        // TODO 버킷의 모든 파일 조회해서 File 타입으로 변환 (파일 비교를 위해)
+        return result;
+    }
+
+    public void removeFolder(List<String> keys) {
+        System.out.println(keys);
+        List<KeyVersion> keyVersions = keys.stream().map(KeyVersion::new).toList();
+
+        DeleteObjectsRequest dor = new DeleteObjectsRequest(bucket).withKeys(keyVersions);
+        DeleteObjectsResult delObjRes = amazonS3Client.deleteObjects(dor);
+
+        int successfulDeletes = delObjRes.getDeletedObjects().size();
+        System.out.println(successfulDeletes + " objects successfully deleted.");
     }
 
 }

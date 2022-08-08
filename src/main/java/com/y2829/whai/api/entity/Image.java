@@ -15,10 +15,13 @@ import java.time.LocalDateTime;
 @Entity
 public class Image extends BaseEntity {
 
+    @ManyToOne
+    private Question question;
+
     private String storeFileName;
 
     private String originFileName;
 
-    private LocalDateTime createAt = LocalDateTime.now();
+    private LocalDateTime createAt;
 
 }

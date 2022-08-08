@@ -6,10 +6,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static com.y2829.whai.api.dto.QuestionDto.*;
 import static com.y2829.whai.common.utils.ApiUtils.*;
@@ -22,17 +26,17 @@ public class QuestionRestController {
 
     private final QuestionService questionService;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "질문 등록", description = "질문을 등록합니다.", security = { @SecurityRequirement(name = "bearer-key")})
-    public ApiResult<Long> postQuestion(@Valid @RequestBody PostQuestionRequest postRequest) {
+    public ApiResult<Long> postQuestion(@Valid @ModelAttribute PostQuestionRequest postRequest) {
         return success(
                 questionService.saveQuestion(postRequest)
         );
     }
 
-    @PatchMapping
+    @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "질문 수정", description = "질문을 수정합니다.", security = { @SecurityRequirement(name = "bearer-key")})
-    public ApiResult<Long> patchQuestion(@Valid @RequestBody PatchQuestionRequest patchRequest) {
+    public ApiResult<Long> patchQuestion(@Valid @ModelAttribute PatchQuestionRequest patchRequest) {
         return success(
                 questionService.modifyQuestion(patchRequest)
         );

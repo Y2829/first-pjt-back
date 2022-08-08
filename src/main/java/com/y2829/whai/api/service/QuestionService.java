@@ -3,6 +3,9 @@ package com.y2829.whai.api.service;
 import com.y2829.whai.api.entity.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 import static com.y2829.whai.api.dto.QuestionDto.*;
 
