@@ -1,0 +1,14 @@
+server:
+  port: 8081
+  address: 0.0.0.0
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/whai?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+    username: y2829
+    password: Admin2829!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  redis:
+    host: localhost
+    port: 6379

@@ -1,0 +1,44 @@
+server:
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      force: true
+
+spring:
+  profiles:
+    include: oauth, real, aws
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# cors 설정
+cors:
+  allowed-origins: 'http://localhost:3000'
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: '*'
+  max-age: 3600
+
+# jwt secret key 설정
+jwt:
+  secret: '5597b93a2843078cbb0c920ae41dfe20f1685e10c67e423c11ab91adfc319d12'
+
+# 토큰 관련 secret Key 및 RedirectUri 설정
+app:
+  auth:
+    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    tokenExpiry: 1800000
+    refreshTokenExpiry: 604800000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth/redirect
