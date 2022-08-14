@@ -22,7 +22,8 @@ jobs:
     - name: Create mysql docker container
       run: |
         sudo docker run -d -p 3306:3306 \
-        --platform linux/amd64 \
+        --name=whai-mysql \
+        --platform=linux/amd64 \
         --env MYSQL_ROOT_PASSWORD=y2829! \
         --env MYSQL_USER=y2829 \
         --env MYSQL_PASSWORD=Admin2829! \
@@ -33,6 +34,7 @@ jobs:
     - name: Create redis docker container
       run: |
         sudo docker run -d -p 6379:6379 \
+        --name=whai-redis \
         --network=whai-net \
         redis:alpine
     
