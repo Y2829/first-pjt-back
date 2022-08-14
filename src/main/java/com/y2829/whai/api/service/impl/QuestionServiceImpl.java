@@ -227,13 +227,14 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByTitle(String title, Pageable pageable) {
-        return questionRepository.findByTitleLike(title, pageable);
+        System.out.println(title);
+        return questionRepository.findByTitleLike("%"+title+"%", pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByContent(String content, Pageable pageable) {
-        return questionRepository.findByContentLike(content, pageable);
+        return questionRepository.findByContentLike("%"+content+"%", pageable);
     }
 
     @Override

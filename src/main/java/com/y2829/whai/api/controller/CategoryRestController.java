@@ -28,7 +28,9 @@ public class CategoryRestController {
 
     @GetMapping("{word}")
     @Operation(summary = "카테고리 검색", description = "카테고리를 검색합니다.")
-    public ApiResult<ListCategoryResponse> getCategoriesByWord(@PathVariable String word) {
+    public ApiResult<ListCategoryResponse> getCategoriesByWord(
+            @PathVariable String word
+    ) {
         return success(
                 new ListCategoryResponse(categoryService.findAllCategoryByWord(word))
         );

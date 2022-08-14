@@ -5,7 +5,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,9 @@ public class MentorRestController {
 
     @PostMapping
     @Operation(summary = "멘토 등록", description = "멘토를 등록합니다.", security = { @SecurityRequirement(name = "bearer-key") })
-    public ApiResult<Long> createMentor(@RequestBody PostMentorRequest requestMentor) {
+    public ApiResult<Long> createMentor(
+            @RequestBody PostMentorRequest requestMentor
+    ) {
         return success(
             mentorService.saveMentor(requestMentor)
         );
@@ -32,15 +35,21 @@ public class MentorRestController {
 
     @GetMapping("/list")
     @Operation(summary = "전체 멘토 조회", description = "모든 멘토를 조회합니다.")
-    public ApiResult<MentorResponse> getMentors(Pageable pageable) {
+    public ApiResult<MentorResponse> getMentors(
+            @RequestParam Integer page,
+            @RequestParam Integer size,
+            @RequestParam String sort
+    ) {
         return success(
-                new MentorResponse(mentorService.findAll(pageable))
+                new MentorResponse(mentorService.findAll(PageRequest.of(page, size, Sort.by(sort))))
         );
     }
 
     @PatchMapping
     @Operation(summary = "멘토 수정", description = "멘토를 수정합니다.", security = { @SecurityRequirement(name = "bearer-key") })
-    public ApiResult<Long> modifyMentor(@Valid @RequestBody PatchMentorRequest request) {
+    public ApiResult<Long> modifyMentor(
+            @Valid @RequestBody PatchMentorRequest request
+    ) {
         return success(
                 mentorService.modifyMentor(request)
         );
@@ -48,7 +57,10 @@ public class MentorRestController {
 
     @DeleteMapping("{userId}/{mentorId}")
     @Operation(summary = "멘토 삭제", description = "멘토를 삭제합니다.", security = { @SecurityRequirement(name = "bearer-key") })
-    public ApiResult<Long> removeMentor(@PathVariable Long userId, @PathVariable Long mentorId) {
+    public ApiResult<Long> removeMentor(
+            @PathVariable Long userId,
+            @PathVariable Long mentorId
+    ) {
         return success(
                 mentorService.removeMentor(mentorId)
         );

@@ -31,6 +31,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -43,6 +44,11 @@ public class SecurityConfig {
     private final CustomOAuth2UserService oAuth2UserService;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    private final String API_BASE_URL = "/api/v1/";
+    private final String[] swaggerPermitUrl = { "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**",
+            "/webjars/**", "/api-docs/**", "/configuration/**" };
+    private final String[] questionPermitUrl = { "all", "detail/**", "category/**", "title/**", "content/**", "user/**"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -67,10 +73,8 @@ public class SecurityConfig {
             .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**",
-                        "/webjars/**", "/api-docs/**", "/configuration/**").permitAll()
-                .antMatchers("/api/v1/questions/all", "/api/v1/questions/detail",
-                        "/api/v1/questions/category/**").permitAll()
+                .antMatchers(swaggerPermitUrl).permitAll()
+                .antMatchers(getPermitUrl(questionPermitUrl, "question/")).permitAll()
                 .antMatchers("/api/v1/category/**").permitAll()
                 .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
                 .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
@@ -94,6 +98,14 @@ public class SecurityConfig {
 
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    private String[] getPermitUrl(String[] pattern, String prefix) {
+        String[] urls = pattern.clone();
+        for (int i=0; i<urls.length; i++) {
+            urls[i] = API_BASE_URL + prefix + urls[i];
+        }
+        return urls;
     }
 
     /*
