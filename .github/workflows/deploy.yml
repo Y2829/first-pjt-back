@@ -17,24 +17,23 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: Create docker network
-      run: |
-        docker network create -d bridge whai-net
+      run: docker network create -d bridge whai-net
     
     - name: Create mysql docker container
       run: |
-        sudo docker run -d -p 3306:3306 
-        --platform linux/amd64 
-        --env MYSQL_ROOT_PASSWORD=y2829! 
-        --env MYSQL_USER=y2829 
-        --env MYSQL_PASSWORD=Admin2829! 
-        --env MYSQL_DATABASE=whai 
-        --network=whai-net 
+        sudo docker run -d -p 3306:3306 \
+        --platform linux/amd64 \
+        --env MYSQL_ROOT_PASSWORD=y2829! \
+        --env MYSQL_USER=y2829 \
+        --env MYSQL_PASSWORD=Admin2829! \
+        --env MYSQL_DATABASE=whai \
+        --network=whai-net \
         mysql:8.0.30
     
     - name: Create redis docker container
       run: |
-        sudo docker run -d -p 6379:6379 
-        --network=whai-net 
+        sudo docker run -d -p 6379:6379 \
+        --network=whai-net \
         redis:alpine
     
     - name: Set up JDK 17
