@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 
 public class QuestionDto {
 
+    private static String S3_BASE_URL = "https://whai-bucket.s3.ap-northeast-2.amazonaws.com/question/";
+
     @Getter
     @Setter
     public static class PostQuestionRequest {
@@ -59,6 +61,7 @@ public class QuestionDto {
     public static class SimpleQuestion {
         private final Long questionId;
         private final Long userId;
+        private final String name;
         private final String title;
         private final String content;
         private final List<String> categories;
@@ -67,6 +70,7 @@ public class QuestionDto {
         public SimpleQuestion(Question question) {
             this.questionId = question.getId();
             this.userId = question.getUser().getId();
+            this.name = question.getUser().getName();
             this.title = question.getTitle();
             this.content = question.getContent();
             this.categories = question.getCategories().stream()
@@ -74,7 +78,7 @@ public class QuestionDto {
                     .map(Category::getSubject)
                     .collect(Collectors.toList());
             this.imageUrls = question.getImages().stream()
-                    .map(Image::getStoreFileName)
+                    .map(image -> S3_BASE_URL + question.getId() + "/" + image.getStoreFileName())
                     .collect(Collectors.toList());
         }
     }

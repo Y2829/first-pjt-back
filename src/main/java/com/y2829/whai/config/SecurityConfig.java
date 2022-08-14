@@ -45,10 +45,12 @@ public class SecurityConfig {
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private final String API_BASE_URL = "/api/v1/";
     private final String[] swaggerPermitUrl = { "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**",
             "/webjars/**", "/api-docs/**", "/configuration/**" };
     private final String[] questionPermitUrl = { "all", "detail/**", "category/**", "title/**", "content/**", "user/**"};
+    private final String[] reviewPermitUrl = { "list/**" };
+    private final String[] categoryPermitUrl = { "/**" };
+    private final String[] mentorPermitUrl = { "list/**" };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -74,8 +76,10 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(swaggerPermitUrl).permitAll()
-                .antMatchers(getPermitUrl(questionPermitUrl, "question/")).permitAll()
-                .antMatchers("/api/v1/category/**").permitAll()
+                .antMatchers(getPermitUrl(questionPermitUrl, "question")).permitAll()
+                .antMatchers(getPermitUrl(reviewPermitUrl, "review")).permitAll()
+                .antMatchers(getPermitUrl(categoryPermitUrl, "category")).permitAll()
+                .antMatchers(getPermitUrl(mentorPermitUrl, "mentor")).permitAll()
                 .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
                 .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
                 .anyRequest().authenticated()
@@ -101,9 +105,11 @@ public class SecurityConfig {
     }
 
     private String[] getPermitUrl(String[] pattern, String prefix) {
+        String API_BASE_URL = "/api/v1/";
+
         String[] urls = pattern.clone();
         for (int i=0; i<urls.length; i++) {
-            urls[i] = API_BASE_URL + prefix + urls[i];
+            urls[i] = API_BASE_URL + prefix + "/" + urls[i];
         }
         return urls;
     }
