@@ -5,16 +5,16 @@ import com.y2829.whai.api.repository.*;
 import com.y2829.whai.api.service.QuestionService;
 import com.y2829.whai.common.exception.NotFoundException;
 import com.y2829.whai.common.exception.UnauthorizedException;
+import com.y2829.whai.common.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.y2829.whai.api.dto.QuestionDto.*;
@@ -33,6 +33,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final UserRepository userRepository;
 
+    private final S3Uploader s3Uploader;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long saveQuestion(PostQuestionRequest request) {
@@ -42,6 +44,9 @@ public class QuestionServiceImpl implements QuestionService {
         User user = userRepository.findById(request.getUserId())
                         .orElseThrow(() -> new NotFoundException("Not found user"));
         question.setUser(user);
+
+        // 질문 등록
+        Question newQuestion = questionRepository.save(question);
 
         // 카테고리 매칭
         List<String> categories = request.getCategories();
@@ -54,17 +59,31 @@ public class QuestionServiceImpl implements QuestionService {
             newCategories.add(category);
         }
 
-        // TODO 이미지 매칭
-        List<Image> images = null;
-        question.setImages(images);
-
-        Question newQuestion = questionRepository.save(question);
-
-        // 연관 관계 매핑
+        // 카테고리 연관 관계 매핑
         List<QuestionCategory> questionCategoryList = newCategories.stream()
                 .map(category -> new QuestionCategory(newQuestion, category)).toList();
 
         questionCategoryRepository.saveAll(questionCategoryList);
+
+        // 이미지 매칭
+        List<Image> newImages = new ArrayList<>();
+
+        for (MultipartFile image : request.getImages()) {
+            String storePath = "question/" + newQuestion.getId();
+            String randomFileName = UUID.randomUUID().toString();
+            s3Uploader.upload(image, storePath, randomFileName);
+
+            newImages.add(
+                    Image.builder()
+                            .question(newQuestion)
+                            .originFileName(image.getOriginalFilename())
+                            .storeFileName(randomFileName)
+                            .createAt(LocalDateTime.now())
+                            .build()
+            );
+        }
+
+        imageRepository.saveAll(newImages);
 
         return newQuestion.getId();
     }
@@ -82,6 +101,9 @@ public class QuestionServiceImpl implements QuestionService {
 
         // 타이틀, 콘텐츠 업데이트
         question.update(request);
+
+        // 수정한 질문 등록
+        Question newQuestion = questionRepository.save(question);
 
         // 카테고리 매칭
         List<QuestionCategory> questionCategoryList = question.getCategories();
@@ -104,18 +126,6 @@ public class QuestionServiceImpl implements QuestionService {
             newCategories.add(category);
         }
 
-        // TODO 이미지 매칭
-        List<Image> images = null;
-        question.setImages(images);
-
-        Question newQuestion = questionRepository.save(question);
-
-        // 연관 관계 매핑
-        List<QuestionCategory> newQuestionCategoryList = newCategories.stream()
-                .map(category -> new QuestionCategory(newQuestion, category)).toList();
-
-        questionCategoryRepository.saveAll(newQuestionCategoryList);
-
         // 수정되어 제거된 카테고리 삭제
         Set<String> newCategorySet = new HashSet<>(request.getCategories());
 
@@ -124,6 +134,46 @@ public class QuestionServiceImpl implements QuestionService {
                 questionCategoryRepository.delete(qc);
             }
         }
+
+        // 카테고리 연관 관계 매핑
+        List<QuestionCategory> newQuestionCategoryList = newCategories.stream()
+                .map(category -> new QuestionCategory(newQuestion, category)).toList();
+
+        questionCategoryRepository.saveAll(newQuestionCategoryList);
+
+        // TODO 제거된 이미지 삭제
+        /*
+         1) 저장된 이미지 조회
+         2) 파일 비교
+         3) 제거된 삭제
+         4) 새로 추가된 이미지 저장
+        */
+        s3Uploader.removeFolder(
+                question.getImages().stream()
+                        .map(Image::getStoreFileName)
+                        .collect(Collectors.toList())
+        );
+        imageRepository.deleteAllByQuestionId(question.getId());
+
+        // 이미지 매칭
+        List<Image> newImages = new ArrayList<>();
+
+        for (MultipartFile image : request.getImages()) {
+            String storePath = "question/" + newQuestion.getId();
+            String randomFileName = UUID.randomUUID().toString();
+            s3Uploader.upload(image, storePath, randomFileName);
+
+            newImages.add(
+                    Image.builder()
+                            .question(newQuestion)
+                            .originFileName(image.getOriginalFilename())
+                            .storeFileName(randomFileName)
+                            .createAt(LocalDateTime.now())
+                            .build()
+            );
+        }
+
+        imageRepository.saveAll(newImages);
 
         return newQuestion.getId();
     }
@@ -158,8 +208,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Question> findAllQuestionByUserId(Long userId, Pageable pageable) {
-        return questionRepository.findByUserId(userId, pageable);
+    public Page<Question> findAllQuestionByUserOauthId(String userOauthId, Pageable pageable) {
+        return questionRepository.findByUserUserOauthId(userOauthId, pageable);
     }
 
     @Override
@@ -172,6 +222,24 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByCategorySubject(String subject, Pageable pageable) {
         return questionRepository.findByCategorySubject(subject, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllQuestionByTitle(String title, Pageable pageable) {
+        return questionRepository.findByTitleLike(title, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllQuestionByContent(String content, Pageable pageable) {
+        return questionRepository.findByContentLike(content, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllQuestionByUserName(String name, Pageable pageable) {
+        return questionRepository.findByUserName(name, pageable);
     }
 
 }

@@ -7,7 +7,7 @@ server:
 
 spring:
   profiles:
-    include: oauth, real
+    include: oauth, real, aws
 
   jpa:
     hibernate:

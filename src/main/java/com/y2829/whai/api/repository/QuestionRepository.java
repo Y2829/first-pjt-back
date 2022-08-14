@@ -18,6 +18,14 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findByUserId(Long userId, Pageable pageable);
 
+    Page<Question> findByUserUserOauthId(String userOauthId, Pageable pageable);
+
+    Page<Question> findByTitleLike(String title, Pageable pageable);
+
+    Page<Question> findByContentLike(String content, Pageable pageable);
+
+    Page<Question> findByUserName(String name, Pageable pageable);
+
     @Query(value = "SELECT q FROM Question q JOIN QuestionCategory qc ON q = qc.question WHERE qc.category.id = :categoryId")
     Page<Question> findByCategoryId(Long categoryId, Pageable pageable);
 

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Image extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Question question;
 
     private String storeFileName;
