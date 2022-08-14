@@ -1,12 +1,13 @@
 package com.y2829.whai.api.entity;
 
-import com.y2829.whai.api.dto.ReviewDto;
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
+
+import static com.y2829.whai.api.dto.ReviewDto.PatchReviewRequest;
 
 @Getter
 @Setter
@@ -28,7 +29,7 @@ public class Review extends BaseEntity {
 
     private LocalDateTime createAt;
 
-    public void update(ReviewDto.PatchReviewRequest request) {
+    public void update(PatchReviewRequest request) {
         this.content = request.getContent();
         this.grade = request.getGrade();
     }
