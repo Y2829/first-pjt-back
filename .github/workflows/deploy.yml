@@ -84,3 +84,14 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        
+  deploy:
+    needs: build
+        
+    runs-on: [ self-hosted ]
+    
+    steps:
+    - name: Docker run
+      run: |
+        docker stop whai-back && docker rm whai-back && docker rmi heung27/whai-back:latest
+        docker-compose up -d
