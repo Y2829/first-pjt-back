@@ -1,19 +1,23 @@
 version: '3'
 services:
-  whai-back:
-    image: heung27/whai-back:latest
+  backend:
+    container_name: whai-back
+    image: heung27/whai-back:main
     ports:
-      - '80:8081'
+       - '80:8081' # real
+#      - '8081:8081' # local
     platform: linux/amd64
+    restart: always
     environment:
       - USE_PROFILE=real
     depends_on:
-      - whai-mysql
-      - whai-redis
+      - mysql
+      - redis
     networks:
       - whai-net
 
-  whai-mysql:
+  mysql:
+    container_name: whai-mysql
     image: mysql:8.0.30
     ports:
       - '3306:3306'
@@ -26,7 +30,8 @@ services:
     networks:
       - whai-net
 
-  whai-redis:
+  redis:
+    container_name: whai-redis
     image: redis:alpine
     ports:
       - '6379:6379'
