@@ -24,6 +24,7 @@ import static com.y2829.whai.api.dto.QuestionDto.*;
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final QuestionRepositorySupport questionRepositorySupport;
 
     private final CategoryRepository categoryRepository;
 
@@ -241,6 +242,30 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByUserName(String name, Pageable pageable) {
         return questionRepository.findByUserName(name, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllQuestionByCategoryAndTitle(List<String> categories, String title, Pageable pageable) {
+        return questionRepositorySupport.findByCategoriesAndTitleLike(categories, title, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllQuestionByCategoryAndContent(List<String> categories, String content, Pageable pageable) {
+        return questionRepositorySupport.findByCategoriesAndContentLike(categories, content, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllQuestionByCategoryAndUserName(List<String> categories, String userName, Pageable pageable) {
+        return questionRepositorySupport.findByCategoriesAndUserNameLike(categories, userName, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllQuestionByCategorySubjects(List<String> categories, Pageable pageable) {
+        return questionRepositorySupport.findByCategories(categories, pageable);
     }
 
 }

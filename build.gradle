@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.y2829'
@@ -37,30 +38,35 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
 	implementation 'jakarta.validation:jakarta.validation-api:2.0.2'
 
+	// swagger
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 
-
+	// mysql
 	implementation 'mysql:mysql-connector-java:8.0.28'
 
+	// querydsl
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
 	implementation 'com.querydsl:querydsl-apt:5.0.0'
 
+	annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jpa")
+
+	// jwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
-	//rdis
+	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	//embedded-redis
+	// embedded-redis
 	implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
 
-	//웹 소켓
+	// 웹 소켓
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.webjars:sockjs-client:1.5.1'
 	implementation 'org.webjars:stomp-websocket:2.3.4'
 
-	//테스트에서 lombok 사용
+	// 테스트에서 lombok 사용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 }
@@ -68,3 +74,27 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// querydsl 설정
+def querydslDir = "$buildDir/generated/querydsl" as Object
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+	main.java.srcDir querydslDir
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
