@@ -1,0 +1,97 @@
+name: deploy to EC2
+
+on:
+  push:
+    branches: [ 'main' ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ 'main' ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Create docker network
+      run: docker network create -d bridge whai-net
+    
+    - name: Create mysql docker container
+      run: |
+        sudo docker run -d -p 3306:3306 \
+        --name=whai-mysql \
+        --platform=linux/amd64 \
+        --env MYSQL_ROOT_PASSWORD=y2829! \
+        --env MYSQL_USER=y2829 \
+        --env MYSQL_PASSWORD=Admin2829! \
+        --env MYSQL_DATABASE=whai \
+        --network=whai-net \
+        mysql:8.0.30
+    
+    - name: Create redis docker container
+      run: |
+        sudo docker run -d -p 6379:6379 \
+        --name=whai-redis \
+        --network=whai-net \
+        redis:alpine
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+    
+    - name: Cache gradle
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    
+    - name: Build with Gradle
+      run: ./gradlew clean build
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2.0.0
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v4.0.1
+      with:
+        images: heung27/whai-back
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v3.1.1
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        
+  deploy:
+    needs: build
+        
+    runs-on: [ self-hosted ]
+    
+    steps:
+    - name: Docker run
+      run: |
+        docker stop whai-back && docker rm whai-back && docker rmi heung27/whai-back:main
+        docker-compose up -d

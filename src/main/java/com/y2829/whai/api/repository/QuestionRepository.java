@@ -16,10 +16,9 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findAll(Pageable pageable);
 
-    Page<Question> findByUserId(Long userId, Pageable pageable);
-
     Page<Question> findByUserUserOauthId(String userOauthId, Pageable pageable);
 
+    /* deprecated */
     Page<Question> findByTitleLike(String title, Pageable pageable);
 
     Page<Question> findByContentLike(String content, Pageable pageable);
