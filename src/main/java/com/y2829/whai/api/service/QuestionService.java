@@ -23,13 +23,7 @@ public interface QuestionService {
 
     Page<Question> findAllQuestionByUserOauthId(String userOauthId, Pageable pageable);
 
-    Page<Question> findAllQuestionByCategoryAndTitle(List<String> categories, String title, Pageable pageable);
-
-    Page<Question> findAllQuestionByCategoryAndContent(List<String> categories, String content, Pageable pageable);
-
-    Page<Question> findAllQuestionByCategoryAndUserName(List<String> categories, String userName, Pageable pageable);
-
-    Page<Question> findAllQuestionByCategorySubjects(List<String> categories, Pageable pageable);
+    Page<Question> findAllQuestionByConditions(List<String> categories, String title, String content, String userName, Pageable pageable);
 
     /* deprecated */
     Page<Question> findAllQuestionByCategoryId(Long categoryId, Pageable pageable);

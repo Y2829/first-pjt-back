@@ -1,10 +1,10 @@
 package com.y2829.whai.api.repository;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.y2829.whai.api.entity.QCategory;
-import com.y2829.whai.api.entity.QQuestion;
-import com.y2829.whai.api.entity.QQuestionCategory;
-import com.y2829.whai.api.entity.Question;
+import com.y2829.whai.api.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,73 +20,52 @@ public class QuestionRepositorySupport {
     private final JPAQueryFactory jpaQueryFactory;
 
     private final QQuestion qQuestion = QQuestion.question;
-    private final QCategory qCategory = QCategory.category;
-    private final QQuestionCategory qQuestionCategory = QQuestionCategory.questionCategory;
 
-    public Page<Question> findByCategoriesAndTitleLike(List<String> categories, String title, Pageable pageable) {
+    public Page<Question> findByConditions(List<String> categories, String title, String content, String userName, Pageable pageable) {
         List<Question> list = jpaQueryFactory
                 .selectFrom(qQuestion)
-                .leftJoin(qQuestionCategory).fetchJoin()
-                .leftJoin(qCategory).fetchJoin()
                 .where(
-                        qCategory.subject.in(categories),
-                        qQuestion.title.contains(title)
+                        inCategories(categories),
+                        containsTitle(title),
+                        containsContent(content),
+                        eqUserName(userName)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-//                .orderBy()
+                .orderBy(sortQuestionList(pageable))
                 .fetch();
 
         return new PageImpl<>(list);
     }
 
-    public Page<Question> findByCategoriesAndContentLike(List<String> categories, String content, Pageable pageable) {
-        List<Question> list = jpaQueryFactory
-                .selectFrom(qQuestion)
-                .leftJoin(qQuestionCategory).fetchJoin()
-                .leftJoin(qCategory).fetchJoin()
-                .where(
-                        qCategory.subject.in(categories),
-                        qQuestion.content.contains(content)
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-//                .orderBy()
-                .fetch();
-
-        return new PageImpl<>(list);
+    private BooleanExpression inCategories(List<String> categories) {
+        return categories.isEmpty() ? null : qQuestion.categories.any().category.subject.in(categories);
     }
 
-    public Page<Question> findByCategoriesAndUserNameLike(List<String> categories, String userName, Pageable pageable) {
-        List<Question> list = jpaQueryFactory
-                .selectFrom(qQuestion)
-                .leftJoin(qQuestionCategory).fetchJoin()
-                .leftJoin(qCategory).fetchJoin()
-                .where(
-                        qCategory.subject.in(categories),
-                        qQuestion.user.name.eq(userName)
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-//                .orderBy()
-                .fetch();
-
-        return new PageImpl<>(list);
+    private BooleanExpression containsTitle(String title) {
+        return title == null ? null : qQuestion.title.contains(title);
     }
 
-    // 전체 카테고리 처리 필요 ! 정렬도 !
-    public Page<Question> findByCategories(List<String> categories, Pageable pageable) {
-        List<Question> list = jpaQueryFactory
-                .selectFrom(qQuestion)
-                .leftJoin(qQuestionCategory).fetchJoin()
-                .leftJoin(qCategory).fetchJoin()
-                .where(qCategory.subject.in(categories))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageNumber())
-//                .orderBy()
-                .fetch();
+    private BooleanExpression containsContent(String content) {
+        return content == null ? null : qQuestion.content.contains(content);
+    }
 
-        return new PageImpl<>(list);
+    private BooleanExpression eqUserName(String userName) {
+        return userName == null ? null : qQuestion.user.name.eq(userName);
+    }
+
+    private OrderSpecifier<?> sortQuestionList(Pageable pageable) {
+//        정렬 기준 추가시 적용
+//        if (!pageable.getSort().isEmpty()) {
+//            for (Sort.Order order : pageable.getSort()) {
+//                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+//
+//                switch (order.getProperty()) {
+//                    case "create"
+//                }
+//            }
+//        }
+        return new OrderSpecifier<>(Order.DESC, qQuestion.createAt);
     }
 
 }

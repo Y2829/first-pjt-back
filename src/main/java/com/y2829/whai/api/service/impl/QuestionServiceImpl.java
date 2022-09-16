@@ -214,6 +214,14 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public Page<Question> findAllQuestionByConditions(List<String> categories, String title, String content, String userName, Pageable pageable) {
+        return questionRepositorySupport.findByConditions(
+                categories, title, content, userName, pageable
+        );
+    }
+
+    /* deprecated */
+    @Override
     @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByCategoryId(Long categoryId, Pageable pageable) {
         return questionRepository.findByCategoryId(categoryId, pageable);
@@ -242,30 +250,6 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByUserName(String name, Pageable pageable) {
         return questionRepository.findByUserName(name, pageable);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Question> findAllQuestionByCategoryAndTitle(List<String> categories, String title, Pageable pageable) {
-        return questionRepositorySupport.findByCategoriesAndTitleLike(categories, title, pageable);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Question> findAllQuestionByCategoryAndContent(List<String> categories, String content, Pageable pageable) {
-        return questionRepositorySupport.findByCategoriesAndContentLike(categories, content, pageable);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Question> findAllQuestionByCategoryAndUserName(List<String> categories, String userName, Pageable pageable) {
-        return questionRepositorySupport.findByCategoriesAndUserNameLike(categories, userName, pageable);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Question> findAllQuestionByCategorySubjects(List<String> categories, Pageable pageable) {
-        return questionRepositorySupport.findByCategories(categories, pageable);
     }
 
 }

@@ -13,11 +13,36 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	querydsl.extendsFrom compileClasspath
 }
 
 repositories {
 	mavenCentral()
 }
+
+
+// querydsl 설정
+def querydslDir = "$buildDir/generated/querydsl" as Object
+
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+	main.java.srcDir querydslDir
+}
+
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+compileJava.doFirst {
+	if ( file(querydslDir).exists() )
+		delete(file(querydslDir))
+}
+// querydsl 설정 끝
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -45,10 +70,11 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.28'
 
 	// querydsl
+	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jpa'
+	annotationProcessor 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.6'
+
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
 	implementation 'com.querydsl:querydsl-apt:5.0.0'
-
-	annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jpa")
 
 	// jwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
@@ -74,27 +100,3 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-// querydsl 설정
-def querydslDir = "$buildDir/generated/querydsl" as Object
-
-querydsl {
-	jpa = true
-	querydslSourcesDir = querydslDir
-}
-
-sourceSets {
-	main.java.srcDir querydslDir
-}
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-	querydsl.extendsFrom compileClasspath
-}
-
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
-}
-

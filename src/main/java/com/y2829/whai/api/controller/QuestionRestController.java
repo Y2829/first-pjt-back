@@ -180,37 +180,23 @@ public class QuestionRestController {
         );
     }
 
-    @GetMapping
-    @Operation(summary = "질문 검색", description = "질문을 검색합니다. (검색 조건 : 카테고리, 제목, 내용, 사용자)")
-    public ApiResult<PageQuestionResponse> getQuestionsByCondition(
+    @GetMapping("search")
+    @Operation(summary = "질문 검색", description = "질문을 검색합니다. (검색 조건 : 카테고리 + [제목, 내용, 사용자])")
+    public ApiResult<PageQuestionResponse> getQuestionsByConditions(
             @RequestParam List<String> categories,
-            @RequestParam String title,
-            @RequestParam String content,
-            @RequestParam String userName,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String content,
+            @RequestParam(required = false) String userName,
             @RequestParam Integer page,
-            @RequestParam Integer size,
-            @RequestParam String sort
+            @RequestParam Integer size
     ) {
-        Page<Question> questions = null;
-
-        if (!title.isEmpty()) {
-            questions = questionService.findAllQuestionByCategoryAndTitle(
-                    categories, title, PageRequest.of(page, size, Sort.by(sort))
-            );
-        } else if (!content.isEmpty()) {
-            questions = questionService.findAllQuestionByCategoryAndContent(
-                    categories, content, PageRequest.of(page, size, Sort.by(sort))
-            );
-        } else if (!userName.isEmpty()) {
-            questions = questionService.findAllQuestionByCategoryAndUserName(
-                    categories, userName, PageRequest.of(page, size, Sort.by(sort))
-            );
-        } else {
-            questions = questionService.findAllQuestionByCategorySubjects(
-                    categories, PageRequest.of(page, size, Sort.by(sort))
-            );
-        }
-        return success(new PageQuestionResponse(questions));
+        System.out.println(title);
+        return success(
+                new PageQuestionResponse(questionService.findAllQuestionByConditions(
+                categories, title, content, userName,
+                PageRequest.of(page, size)
+                ))
+        );
     }
 
 }
