@@ -1,10 +1,12 @@
 package com.y2829.whai.api.controller;
 
+import com.y2829.whai.api.entity.Question;
 import com.y2829.whai.api.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+
+import java.util.List;
 
 import static com.y2829.whai.api.dto.QuestionDto.*;
 import static com.y2829.whai.common.utils.ApiUtils.*;
@@ -97,7 +101,7 @@ public class QuestionRestController {
     }
 
     @GetMapping("category/{categoryId}")
-    @Operation(summary = "카테고리별 질문 조회(카테고리 아이디)", description = "해당 카테고리의 질문을 조회합니다.")
+    @Operation(summary = "카테고리별 질문 조회(카테고리 아이디)", description = "해당 카테고리의 질문을 조회합니다.", deprecated = true)
     public ApiResult<PageQuestionResponse> getQuestionsByCategoryId(
             @PathVariable Long categoryId,
             @RequestParam Integer page,
@@ -113,7 +117,7 @@ public class QuestionRestController {
     }
 
     @GetMapping("category/word/{subject}")
-    @Operation(summary = "카테고리별 질문 조회(카테고리 단어)", description = "해당 카테고리의 질문을 조회합니다.")
+    @Operation(summary = "카테고리별 질문 조회(카테고리 단어)", description = "해당 카테고리의 질문을 조회합니다.", deprecated = true)
     public ApiResult<PageQuestionResponse> getQuestionsByCategorySubject(
             @PathVariable String subject,
             @RequestParam Integer page,
@@ -129,7 +133,7 @@ public class QuestionRestController {
     }
 
     @GetMapping("title/{title}")
-    @Operation(summary = "제목으로 질문 검색", description = "제목으로 질문을 검색합니다.")
+    @Operation(summary = "제목으로 질문 검색", description = "제목으로 질문을 검색합니다.", deprecated = true)
     public ApiResult<PageQuestionResponse> getQuestionsByTitle(
             @PathVariable String title,
             @RequestParam Integer page,
@@ -145,7 +149,7 @@ public class QuestionRestController {
     }
 
     @GetMapping("content/{content}")
-    @Operation(summary = "내용으로 질문 검색", description = "내용으로 질문을 검색합니다.")
+    @Operation(summary = "내용으로 질문 검색", description = "내용으로 질문을 검색합니다.", deprecated = true)
     public ApiResult<PageQuestionResponse> getQuestionsByContent(
             @PathVariable String content,
             @RequestParam Integer page,
@@ -161,7 +165,7 @@ public class QuestionRestController {
     }
 
     @GetMapping("user/{name}")
-    @Operation(summary = "사용자로 질문 검색", description = "사용자로 질문을 검색합니다.")
+    @Operation(summary = "사용자로 질문 검색", description = "사용자로 질문을 검색합니다.", deprecated = true)
     public ApiResult<PageQuestionResponse> getQuestionsByUserName(
             @PathVariable String name,
             @RequestParam Integer page,
@@ -172,6 +176,25 @@ public class QuestionRestController {
                 new PageQuestionResponse(questionService.findAllQuestionByUserName(
                         name,
                         PageRequest.of(page, size, Sort.by(sort))
+                ))
+        );
+    }
+
+    @GetMapping("search")
+    @Operation(summary = "질문 검색", description = "질문을 검색합니다. (검색 조건 : 카테고리 + [제목, 내용, 사용자])")
+    public ApiResult<PageQuestionResponse> getQuestionsByConditions(
+            @RequestParam List<String> categories,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String content,
+            @RequestParam(required = false) String userName,
+            @RequestParam Integer page,
+            @RequestParam Integer size
+    ) {
+        System.out.println(title);
+        return success(
+                new PageQuestionResponse(questionService.findAllQuestionByConditions(
+                categories, title, content, userName,
+                PageRequest.of(page, size)
                 ))
         );
     }

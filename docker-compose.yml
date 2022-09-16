@@ -4,8 +4,8 @@ services:
     container_name: whai-back
     image: heung27/whai-back:main
     ports:
-       - '80:8081' # real
-#      - '8081:8081' # local
+#       - '80:8081' # real
+      - '8081:8081' # local
     platform: linux/amd64
     restart: always
     environment:

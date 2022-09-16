@@ -47,7 +47,8 @@ public class SecurityConfig {
 
     private final String[] swaggerPermitUrl = { "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**",
             "/webjars/**", "/api-docs/**", "/configuration/**" };
-    private final String[] questionPermitUrl = { "all", "detail/**", "category/**", "title/**", "content/**", "user/**"};
+    private final String[] questionPermitUrl = { "all", "search/**", "detail/**", "category/**", "title/**",
+            "content/**", "user/**"};
     private final String[] reviewPermitUrl = { "list/**" };
     private final String[] categoryPermitUrl = { "/**" };
     private final String[] mentorPermitUrl = { "list/**" };

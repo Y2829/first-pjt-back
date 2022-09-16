@@ -24,6 +24,7 @@ import static com.y2829.whai.api.dto.QuestionDto.*;
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final QuestionRepositorySupport questionRepositorySupport;
 
     private final CategoryRepository categoryRepository;
 
@@ -212,6 +213,14 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findByUserUserOauthId(userOauthId, pageable);
     }
 
+    @Override
+    public Page<Question> findAllQuestionByConditions(List<String> categories, String title, String content, String userName, Pageable pageable) {
+        return questionRepositorySupport.findByConditions(
+                categories, title, content, userName, pageable
+        );
+    }
+
+    /* deprecated */
     @Override
     @Transactional(readOnly = true)
     public Page<Question> findAllQuestionByCategoryId(Long categoryId, Pageable pageable) {

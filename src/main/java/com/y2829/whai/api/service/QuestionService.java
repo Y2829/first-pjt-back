@@ -23,6 +23,9 @@ public interface QuestionService {
 
     Page<Question> findAllQuestionByUserOauthId(String userOauthId, Pageable pageable);
 
+    Page<Question> findAllQuestionByConditions(List<String> categories, String title, String content, String userName, Pageable pageable);
+
+    /* deprecated */
     Page<Question> findAllQuestionByCategoryId(Long categoryId, Pageable pageable);
 
     Page<Question> findAllQuestionByCategorySubject(String subject, Pageable pageable);
@@ -32,6 +35,5 @@ public interface QuestionService {
     Page<Question> findAllQuestionByContent(String content, Pageable pageable);
 
     Page<Question> findAllQuestionByUserName(String name, Pageable pageable);
-
 
 }
